@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - SITTA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body class="login-page">
+  <div class="login-card fade-in">
+    <div class="login-header">
+      <h1 class="login-title">SITTA</h1>
+      <p class="login-subtitle">Sistem Informasi Bahan Ajar<br>Universitas Terbuka</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input type="email" id="email" class="form-input" placeholder="nama@ut.ac.id" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" id="password" class="form-input" placeholder="Masukkan password" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Login</button>
+
+      <div class="login-links">
+        <a href="#" class="form-link" data-modal="forgotModal">Lupa Password?</a>
+        <a href="#" class="form-link" data-modal="registerModal">Daftar</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div class="modal-backdrop" id="forgotModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Lupa Password</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-secondary mb-md">
+          Masukkan email Anda untuk mereset password.
+        </p>
+        <form id="forgotForm">
+          <div class="form-group">
+            <label class="form-label" for="forgotEmail">Email</label>
+            <input type="email" id="forgotEmail" class="form-input" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close">Batal</button>
+        <button class="btn btn-primary" data-action="forgot-password">Kirim Reset Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal-backdrop" id="registerModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Daftar Akun Baru</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="registerForm">
+          <div class="form-group">
+            <label class="form-label" for="regNama">Nama Lengkap</label>
+            <input type="text" id="regNama" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regEmail">Email</label>
+            <input type="email" id="regEmail" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regPassword">Password</label>
+            <input type="password" id="regPassword" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regLokasi">Lokasi</label>
+            <select id="regLokasi" class="form-input" required>
+              <option value="">Pilih Lokasi</option>
+              <option value="UPBJJ Jakarta">UPBJJ Jakarta</option>
+              <option value="UPBJJ Makassar">UPBJJ Makassar</option>
+              <option value="Puslaba">Puslaba</option>
+              <option value="FISIP">FISIP</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close">Batal</button>
+        <button class="btn btn-primary" data-action="register">Daftar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/pages.js"></script>
+</body>
+</html>

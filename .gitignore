@@ -1,0 +1,38 @@
+# Documentation
+**/docs/superpowers
+**/criteria.md
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+*.min.js
+*.min.css
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Archives
+**/*.zip
+*.tar.gz
+*.rar
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+.cache/

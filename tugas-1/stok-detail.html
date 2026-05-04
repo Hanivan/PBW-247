@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Bahan Ajar - SITTA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-icon">S</span>
+          <span>SITTA</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <span>(^^)</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="tracking.html" class="nav-item">
+          <span>(>_<)</span>
+          <span>Tracking Pengiriman</span>
+        </a>
+        <a href="stok.html" class="nav-item">
+          <span>(_|_)</span>
+          <span>Stok Bahan Ajar</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-secondary btn-block" data-action="toggle-theme">(-_-) Dark Mode</button>
+        <button class="btn btn-danger btn-block mt-sm" data-action="logout">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <button class="sidebar-toggle" aria-label="Toggle sidebar">≡</button>
+        <div class="header-content">
+          <a href="stok.html" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: var(--spacing-2); text-decoration: none;">
+            <span>←</span>
+            <span>Kembali</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="content">
+        <div id="stockDetailContent">
+          <!-- Detail will be rendered here -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="modal-backdrop" id="logoutModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Konfirmasi Logout</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-secondary mb-md">
+          Apakah Anda yakin ingin keluar dari aplikasi?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close">Batal</button>
+        <button class="btn btn-danger" data-action="confirm-logout">Ya, Keluar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/pages.js"></script>
+</body>
+</html>

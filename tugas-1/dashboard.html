@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - SITTA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-icon">S</span>
+          <span>SITTA</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item active">
+          <span>(^^)</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="tracking.html" class="nav-item">
+          <span>(>_<)</span>
+          <span>Tracking Pengiriman</span>
+        </a>
+        <a href="stok.html" class="nav-item">
+          <span>(_|_)</span>
+          <span>Stok Bahan Ajar</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-secondary btn-block" data-action="toggle-theme">
+          <span id="themeIcon">(-_-)</span> Dark Mode
+        </button>
+        <button class="btn btn-danger btn-block mt-sm" data-action="logout">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <button class="sidebar-toggle" aria-label="Toggle sidebar">≡</button>
+        <div class="header-content" id="headerContent">
+          <h1 class="page-title">Dashboard</h1>
+        </div>
+        <div class="header-actions">
+          <span id="greeting" class="text-secondary"></span>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- Stats Overview -->
+        <div class="stats-overview stagger-children">
+          <div class="stat-card slide-up">
+            <div class="stat-icon" style="background: var(--accent-subtle); color: var(--accent-primary);">(_|_)</div>
+            <div class="stat-content">
+              <div class="stat-value" id="statTotalItems">0</div>
+              <div class="stat-label">Total Bahan Ajar</div>
+            </div>
+          </div>
+
+          <div class="stat-card slide-up" style="animation-delay: 75ms;">
+            <div class="stat-icon" style="background: var(--success-subtle); color: var(--success);">(^_^)</div>
+            <div class="stat-content">
+              <div class="stat-value" id="statTotalStock">0</div>
+              <div class="stat-label">Total Stok</div>
+            </div>
+          </div>
+
+          <div class="stat-card slide-up" style="animation-delay: 150ms;">
+            <div class="stat-icon" style="background: var(--warning-subtle); color: var(--warning);">(>_<)</div>
+            <div class="stat-content">
+              <div class="stat-value" id="statShippingCount">0</div>
+              <div class="stat-label">Sedang Dikirim</div>
+            </div>
+          </div>
+
+          <div class="stat-card slide-up" style="animation-delay: 225ms;">
+            <div class="stat-icon" style="background: var(--info-subtle); color: var(--info);">[*]</div>
+            <div class="stat-content">
+              <div class="stat-value" id="statUpbjjCount">0</div>
+              <div class="stat-label">UPBJJ Aktif</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="section-header">
+          <h2 class="section-title">Aksi Cepat</h2>
+        </div>
+        <div class="quick-actions stagger-children">
+          <a href="stok.html" class="action-card slide-up">
+            <div class="action-icon">+</div>
+            <div class="action-content">
+              <div class="action-title">Tambah Stok</div>
+              <div class="action-desc">Tambah bahan ajar baru</div>
+            </div>
+          </a>
+
+          <a href="tracking.html" class="action-card slide-up" style="animation-delay: 50ms;">
+            <div class="action-icon">(O_O)</div>
+            <div class="action-content">
+              <div class="action-title">Lacak Pengiriman</div>
+              <div class="action-desc">Cek status pengiriman</div>
+            </div>
+          </a>
+
+          <div class="action-card slide-up" style="animation-delay: 100ms;">
+            <div class="action-icon">[|]</div>
+            <div class="action-content">
+              <div class="action-title">Export Laporan</div>
+              <div class="action-desc">Unduh laporan bulanan</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Cards -->
+        <div class="section-header">
+          <h2 class="section-title">Menu Utama</h2>
+        </div>
+        <div class="dashboard-cards grid grid-3 stagger-children">
+          <div class="nav-card slide-up" data-href="stok.html">
+            <div class="nav-card-icon">(^^)</div>
+            <div class="nav-card-title">Informasi Bahan Ajar</div>
+            <div class="nav-card-desc">Lihat daftar dan stok bahan ajar yang tersedia</div>
+          </div>
+
+          <div class="nav-card slide-up" data-href="tracking.html" style="animation-delay: 50ms;">
+            <div class="nav-card-icon">(>_<)</div>
+            <div class="nav-card-title">Tracking Pengiriman</div>
+            <div class="nav-card-desc">Lacak status pengiriman bahan ajar</div>
+          </div>
+
+          <div class="nav-card slide-up" style="animation-delay: 100ms;">
+            <div class="nav-card-icon">(_|_)</div>
+            <div class="nav-card-title">Monitoring Progress DO</div>
+            <div class="nav-card-desc">Monitor progress delivery order bahan ajar</div>
+          </div>
+
+          <div class="nav-card slide-up" style="animation-delay: 150ms;">
+            <div class="nav-card-icon">[||]</div>
+            <div class="nav-card-title">Rekap Bahan Ajar</div>
+            <div class="nav-card-desc">Rekapitulasi data bahan ajar per periode</div>
+          </div>
+
+          <div class="nav-card slide-up" style="animation-delay: 200ms;">
+            <div class="nav-card-icon">/↑\</div>
+            <div class="nav-card-title">Laporan</div>
+            <div class="nav-card-desc">Lihat laporan pemesanan dan distribusi</div>
+          </div>
+
+          <div class="nav-card slide-up" style="animation-delay: 250ms;">
+            <div class="nav-card-icon">(time)</div>
+            <div class="nav-card-title">Histori Transaksi</div>
+            <div class="nav-card-desc">Riwayat transaksi bahan ajar sebelumnya</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="modal-backdrop" id="logoutModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Konfirmasi Logout</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-secondary mb-md">
+          Apakah Anda yakin ingin keluar dari aplikasi?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close">Batal</button>
+        <button class="btn btn-danger" data-action="confirm-logout">Ya, Keluar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/pages.js"></script>
+</body>
+</html>

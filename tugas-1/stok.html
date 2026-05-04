@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stok Bahan Ajar - SITTA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-icon">S</span>
+          <span>SITTA</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item">
+          <span>(^^)</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="tracking.html" class="nav-item">
+          <span>(>_<)</span>
+          <span>Tracking Pengiriman</span>
+        </a>
+        <a href="stok.html" class="nav-item active">
+          <span>(_|_)</span>
+          <span>Stok Bahan Ajar</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-secondary btn-block" data-action="toggle-theme">(-_-) Dark Mode</button>
+        <button class="btn btn-danger btn-block mt-sm" data-action="logout">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <button class="sidebar-toggle" aria-label="Toggle sidebar">≡</button>
+        <div class="header-content">
+          <h1 class="page-title">Stok Bahan Ajar</h1>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="stock-header">
+          <div class="stock-search">
+            <input type="text" id="stockSearch" class="form-input" placeholder="Cari bahan ajar...">
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-secondary" id="viewToggle" data-view="table" title="Ganti tampilan">
+              <span id="viewIcon">▦</span>
+            </button>
+            <button class="btn btn-primary" data-action="add-stock">+ Tambah Stok</button>
+          </div>
+        </div>
+
+        <div class="table-container" id="tableView">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Kode Lokasi</th>
+                <th>Kode Barang</th>
+                <th>Nama Barang</th>
+                <th>Jenis</th>
+                <th>Edisi</th>
+                <th>Stok</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="stockTableBody">
+              <!-- Data will be rendered here -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="stock-grid hidden" id="gridView">
+          <div id="stockGridBody" class="stock-grid-container">
+            <!-- Data will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="modal-backdrop" id="logoutModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Konfirmasi Logout</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-secondary mb-md">
+          Apakah Anda yakin ingin keluar dari aplikasi?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close">Batal</button>
+        <button class="btn btn-danger" data-action="confirm-logout">Ya, Keluar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Stock Modal -->
+  <div class="modal-backdrop" id="addStockModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Tambah Stok Baru</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="addStockForm">
+          <div class="form-group">
+            <label class="form-label" for="kodeLokasi">Kode Lokasi</label>
+            <input type="text" id="kodeLokasi" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="kodeBarang">Kode Barang</label>
+            <input type="text" id="kodeBarang" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="namaBarang">Nama Barang</label>
+            <input type="text" id="namaBarang" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="jenisBarang">Jenis Barang</label>
+            <select id="jenisBarang" class="form-input" required>
+              <option value="BMP">BMP (Bahan Modul Pemanduan)</option>
+              <option value="Buku Teks">Buku Teks</option>
+              <option value="CD">CD/DVD</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="edisi">Edisi</label>
+            <input type="text" id="edisi" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="stok">Jumlah Stok</label>
+            <input type="number" id="stok" class="form-input" min="0" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close">Batal</button>
+        <button class="btn btn-primary" data-action="save-stock">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Stock Modal -->
+  <div class="modal-backdrop" id="editStockModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Edit Stok</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="editStockForm">
+          <input type="hidden" id="editKodeBarangOriginal">
+          <div class="form-group">
+            <label class="form-label" for="editKodeLokasi">Kode Lokasi</label>
+            <input type="text" id="editKodeLokasi" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editKodeBarang">Kode Barang</label>
+            <input type="text" id="editKodeBarang" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editNamaBarang">Nama Barang</label>
+            <input type="text" id="editNamaBarang" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editJenisBarang">Jenis Barang</label>
+            <select id="editJenisBarang" class="form-input" required>
+              <option value="BMP">BMP (Bahan Modul Pemanduan)</option>
+              <option value="Buku Teks">Buku Teks</option>
+              <option value="CD">CD/DVD</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editEdisi">Edisi</label>
+            <input type="text" id="editEdisi" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editStok">Jumlah Stok</label>
+            <input type="number" id="editStok" class="form-input" min="0" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close">Batal</button>
+        <button class="btn btn-primary" data-action="update-stock">Update</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-backdrop" id="deleteModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Konfirmasi Hapus</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-secondary mb-md">
+          Apakah Anda yakin ingin menghapus stok ini?
+        </p>
+        <p class="text-secondary" id="deleteItemName"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close">Batal</button>
+        <button class="btn btn-danger" data-action="confirm-delete">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/pages.js"></script>
+</body>
+</html>
