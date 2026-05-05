@@ -64,7 +64,7 @@ export const UI = {
       if (e.target.classList.contains('modal-backdrop')) {
         const modal = e.target.querySelector('.modal');
         if (modal) {
-          this.hideModal(modal);
+          this.hideModal(e.target);
         }
       }
     }, { passive: true });
@@ -74,10 +74,7 @@ export const UI = {
       if (e.key === 'Escape') {
         const activeModal = document.querySelector('.modal-backdrop.active');
         if (activeModal) {
-          const modal = activeModal.querySelector('.modal');
-          if (modal) {
-            this.hideModal(modal);
-          }
+          this.hideModal(activeModal);
         }
       }
     }, { passive: true });
@@ -86,34 +83,28 @@ export const UI = {
     document.addEventListener('click', (e) => {
       const closeBtn = e.target.closest('.modal-close');
       if (closeBtn) {
-        const modal = closeBtn.closest('.modal');
-        if (modal) {
-          this.hideModal(modal);
+        const backdrop = closeBtn.closest('.modal-backdrop');
+        if (backdrop) {
+          this.hideModal(backdrop);
         }
       }
     }, { passive: true });
   },
 
   showModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (!modal) return;
+    const backdrop = document.getElementById(modalId);
+    if (!backdrop) return;
 
-    const backdrop = modal.closest('.modal-backdrop');
-    if (backdrop) {
-      backdrop.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
+    backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
   },
 
   hideModal(modalId) {
-    const modal = typeof modalId === 'string' ? document.getElementById(modalId) : modalId;
-    if (!modal) return;
+    const backdrop = typeof modalId === 'string' ? document.getElementById(modalId) : modalId;
+    if (!backdrop) return;
 
-    const backdrop = modal.closest('.modal-backdrop');
-    if (backdrop) {
-      backdrop.classList.remove('active');
-      document.body.style.overflow = '';
-    }
+    backdrop.classList.remove('active');
+    document.body.style.overflow = '';
   },
 
   // Alerts

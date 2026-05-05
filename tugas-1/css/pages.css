@@ -1,19 +1,43 @@
-/* Modern Japanese Brand - Page Specific Styles */
-/* Refined, intentional, memorable */
+/* ========================================
+   JAPANESE CREATIVE AESTHETIC - Page Styles
+   SITTA - Distinctive Pages with Traditional Elements
+   ======================================== */
 
-/* ========== DASHBOARD ========== */
+/* ========================================
+   DASHBOARD - Japanese Editorial Layout
+   ======================================== */
+
 .section-header {
   margin-bottom: var(--spacing-5);
+  position: relative;
+}
+
+/* Vertical accent line */
+.section-header::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent-primary) 50%,
+    transparent
+  );
+  opacity: 0.3;
 }
 
 .section-title {
-  font-family: var(--font-display);
+  font-family: var(--font-jp-serif);
   font-size: var(--text-lg);
   font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-jp);
   color: var(--text-primary);
 }
 
-/* Stats Overview */
+/* Stats Overview - Japanese Card Style */
 .stats-overview {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -29,13 +53,32 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-4);
-  transition: all var(--duration-200) var(--ease-default);
+  transition: all var(--duration-300) var(--ease-jp);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative corner accent */
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, transparent 50%, var(--accent-subtle) 50%);
+  opacity: 0.5;
+  transition: opacity var(--duration-300) var(--ease-jp);
+}
+
+.stat-card:hover::before {
+  opacity: 1;
 }
 
 .stat-card:hover {
   border-color: var(--border-default);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
 }
 
 .stat-icon {
@@ -47,6 +90,17 @@
   justify-content: center;
   font-size: var(--text-xl);
   flex-shrink: 0;
+  position: relative;
+}
+
+/* Icon background with subtle pattern */
+.stat-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='1' fill='%23000' opacity='0.1'/%3E%3C/svg%3E");
+  opacity: 0.5;
 }
 
 .stat-content {
@@ -54,7 +108,7 @@
 }
 
 .stat-value {
-  font-family: var(--font-display);
+  font-family: var(--font-jp-serif);
   font-size: var(--text-2xl);
   font-weight: var(--font-bold);
   color: var(--text-primary);
@@ -62,12 +116,14 @@
 }
 
 .stat-label {
+  font-family: var(--font-jp-sans);
   font-size: var(--text-sm);
   color: var(--text-secondary);
   margin-top: var(--spacing-1);
+  letter-spacing: var(--tracking-wide);
 }
 
-/* Quick Actions */
+/* Quick Actions - Japanese Style */
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -84,21 +140,22 @@
   align-items: center;
   gap: var(--spacing-4);
   text-decoration: none;
-  transition: all var(--duration-200) var(--ease-default);
+  transition: all var(--duration-300) var(--ease-jp);
   position: relative;
   overflow: hidden;
 }
 
+/* Vertical accent bar */
 .action-card::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 0;
-  bottom: 0;
+  top: 50%;
+  transform: translateY(-50%);
   width: 3px;
-  background: var(--accent-primary);
-  transform: scaleY(0);
-  transition: transform var(--duration-200) var(--ease-default);
+  height: 0;
+  background: linear-gradient(to bottom, var(--accent-primary), var(--accent-hover));
+  transition: height var(--duration-200) var(--ease-jp);
 }
 
 .action-card:hover {
@@ -108,7 +165,7 @@
 }
 
 .action-card:hover::before {
-  transform: scaleY(1);
+  height: 60%;
 }
 
 .action-icon {
@@ -129,101 +186,21 @@
 }
 
 .action-title {
-  font-family: var(--font-display);
+  font-family: var(--font-jp-serif);
   font-size: var(--text-sm);
   font-weight: var(--font-semibold);
   color: var(--text-primary);
   margin-bottom: var(--spacing-1);
+  letter-spacing: var(--tracking-wide);
 }
 
 .action-desc {
+  font-family: var(--font-jp-sans);
   font-size: var(--text-xs);
   color: var(--text-secondary);
 }
 
-/* ========== LOGIN PAGE ========== */
-body.login-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-6);
-  background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-800) 50%, var(--navy-700) 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Subtle geometric pattern */
-body.login-page::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(230, 57, 70, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(230, 57, 70, 0.05) 0%, transparent 40%);
-  pointer-events: none;
-}
-
-/* Modern accent lines */
-body.login-page::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg,
-    var(--accent-primary) 0%,
-    var(--accent-hover) 50%,
-    var(--accent-primary) 100%
-  );
-}
-
-.login-card {
-  background: var(--bg-elevated);
-  border-radius: var(--radius-2xl);
-  padding: var(--spacing-10);
-  width: 100%;
-  max-width: 420px;
-  box-shadow: var(--shadow-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 1;
-}
-
-.login-header {
-  text-align: center;
-  margin-bottom: var(--spacing-8);
-}
-
-.login-title {
-  font-family: var(--font-display);
-  font-size: var(--text-4xl);
-  font-weight: var(--font-bold);
-  letter-spacing: var(--tracking-wider);
-  color: var(--text-primary);
-  margin-bottom: var(--spacing-3);
-}
-
-.login-subtitle {
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-  line-height: var(--leading-relaxed);
-}
-
-.login-links {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-6);
-  margin-top: var(--spacing-6);
-}
-
-.login-links a {
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-}
-
-/* ========== DASHBOARD ========== */
+/* Dashboard Navigation Cards */
 .dashboard-cards {
   margin-top: var(--spacing-6);
 }
@@ -234,11 +211,12 @@ body.login-page::after {
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  transition: all var(--duration-200) var(--ease-default);
+  transition: all var(--duration-300) var(--ease-jp);
   position: relative;
   overflow: hidden;
 }
 
+/* Top accent line */
 .nav-card::before {
   content: '';
   position: absolute;
@@ -249,13 +227,13 @@ body.login-page::after {
   background: linear-gradient(90deg, var(--accent-primary), var(--accent-hover));
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--duration-200) var(--ease-default);
+  transition: transform var(--duration-300) var(--ease-jp);
 }
 
 .nav-card:hover {
   border-color: var(--accent-primary);
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
 }
 
 .nav-card:hover::before {
@@ -269,21 +247,129 @@ body.login-page::after {
 }
 
 .nav-card-title {
-  font-family: var(--font-display);
+  font-family: var(--font-jp-serif);
   font-size: var(--text-lg);
   font-weight: var(--font-semibold);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-jp);
   margin-bottom: var(--spacing-2);
   color: var(--text-primary);
 }
 
 .nav-card-desc {
+  font-family: var(--font-jp-sans);
   font-size: var(--text-sm);
   color: var(--text-secondary);
   line-height: var(--leading-relaxed);
 }
 
-/* ========== TRACKING PAGE ========== */
+/* ========================================
+   LOGIN PAGE - Japanese Zen Aesthetic
+   ======================================== */
+
+body.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-6);
+  background: linear-gradient(135deg, var(--jp-indigo) 0%, var(--jp-indigo-light) 50%, var(--accent-primary) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle geometric pattern */
+body.login-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(199, 62, 58, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(199, 62, 58, 0.08) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* Traditional Japanese pattern overlay */
+body.login-page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='none' stroke='rgba(255,255,255,0.03)' stroke-width='1'/%3E%3Cpath d='M50 0v100M0 50h100' stroke='rgba(255,255,255,0.02)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.login-card {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-10);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid rgba(199, 62, 58, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+/* Decorative seal */
+.login-card::before {
+  content: 'S';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 60px;
+  height: 60px;
+  border: 3px solid var(--accent-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-jp-serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: var(--bg-elevated);
+  box-shadow:
+    inset 0 0 0 2px var(--accent-primary),
+    0 4px 12px rgba(199, 62, 58, 0.3);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: var(--spacing-8);
+}
+
+.login-title {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-jp-wide);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-3);
+}
+
+.login-subtitle {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.login-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-6);
+}
+
+.login-links a {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+}
+
+/* ========================================
+   TRACKING PAGE
+   ======================================== */
+
 .tracking-search {
   max-width: 600px;
   margin: 0 auto var(--spacing-6);
@@ -308,6 +394,7 @@ body.login-page::after {
   color: var(--text-tertiary);
   font-size: var(--text-sm);
   margin-top: var(--spacing-3);
+  font-family: var(--font-jp-sans);
 }
 
 .tracking-hint code {
@@ -319,7 +406,10 @@ body.login-page::after {
   border: 1px solid var(--border-subtle);
 }
 
-/* ========== STOCK PAGE ========== */
+/* ========================================
+   STOCK PAGE
+   ======================================== */
+
 .stock-header {
   display: flex;
   justify-content: space-between;
@@ -349,13 +439,13 @@ body.login-page::after {
 #viewToggle {
   width: 40px;
   height: 40px;
-  border: none;
-  background: transparent;
+  border: 1px solid var(--border-default);
+  background: var(--bg-elevated);
   border-radius: var(--radius-md);
   cursor: pointer;
   font-size: var(--text-xl);
   color: var(--text-secondary);
-  transition: all var(--duration-150) var(--ease-default);
+  transition: all var(--duration-200) var(--ease-jp);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -366,6 +456,7 @@ body.login-page::after {
 #viewToggle:hover {
   background: var(--bg-tertiary);
   color: var(--text-primary);
+  border-color: var(--accent-primary);
 }
 
 .stock-header .btn {
@@ -388,16 +479,37 @@ body.login-page::after {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  transition: all var(--duration-200) var(--ease-default);
+  transition: all var(--duration-300) var(--ease-jp);
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
+.stock-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-primary),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--duration-300) var(--ease-jp);
+}
+
+.stock-card:hover::before {
+  opacity: 1;
+}
+
 .stock-card:hover {
   border-color: var(--accent-primary);
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
 }
 
 .stock-card-cover {
@@ -412,23 +524,25 @@ body.login-page::after {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--duration-300) var(--ease-default);
+  transition: transform var(--duration-400) var(--ease-jp);
 }
 
 .stock-card:hover .stock-card-cover img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .stock-card-badge {
   position: absolute;
   top: var(--spacing-3);
   right: var(--spacing-3);
-  background: var(--accent-primary);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
   color: white;
   padding: var(--spacing-1) var(--spacing-3);
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
   font-weight: var(--font-semibold);
+  font-family: var(--font-jp-sans);
+  box-shadow: var(--shadow-sm);
 }
 
 .stock-card-content {
@@ -439,7 +553,7 @@ body.login-page::after {
 }
 
 .stock-card-title {
-  font-family: var(--font-display);
+  font-family: var(--font-jp-serif);
   font-size: var(--text-sm);
   font-weight: var(--font-semibold);
   color: var(--text-primary);
@@ -464,6 +578,7 @@ body.login-page::after {
   border-radius: var(--radius-sm);
   display: inline-block;
   margin-bottom: var(--spacing-3);
+  font-size: var(--text-xs);
 }
 
 .stock-card-actions {
@@ -489,7 +604,10 @@ body.login-page::after {
   font-size: var(--text-xs);
 }
 
-/* ========== STOCK DETAIL PAGE ========== */
+/* ========================================
+   STOCK DETAIL PAGE
+   ======================================== */
+
 .stock-detail {
   max-width: 900px;
   margin: 0 auto;
@@ -521,12 +639,13 @@ body.login-page::after {
 }
 
 .stock-detail-title {
-  font-family: var(--font-display);
+  font-family: var(--font-jp-serif);
   font-size: var(--text-2xl);
   font-weight: var(--font-bold);
   color: var(--text-primary);
   margin-bottom: var(--spacing-4);
   line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-jp);
 }
 
 .stock-detail-meta {
@@ -543,11 +662,12 @@ body.login-page::after {
 }
 
 .stock-detail-meta-label {
+  font-family: var(--font-jp-sans);
   font-size: var(--text-xs);
   font-weight: var(--font-medium);
   color: var(--text-tertiary);
   text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
+  letter-spacing: var(--tracking-jp);
 }
 
 .stock-detail-meta-value {
@@ -571,12 +691,13 @@ body.login-page::after {
 }
 
 .stock-detail-stock-badge {
-  background: var(--accent-primary);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
   color: white;
   padding: var(--spacing-2) var(--spacing-4);
   border-radius: var(--radius-full);
   font-size: var(--text-lg);
   font-weight: var(--font-bold);
+  box-shadow: var(--shadow-jp);
 }
 
 .stock-detail-actions {
@@ -591,17 +712,31 @@ body.login-page::after {
   border-radius: var(--radius-xl);
   padding: var(--spacing-6);
   margin-bottom: var(--spacing-6);
+  position: relative;
+}
+
+/* Decorative accent */
+.stock-detail-description::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--spacing-6);
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
 }
 
 .stock-detail-description h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-jp-serif);
   font-size: var(--text-lg);
   font-weight: var(--font-semibold);
   color: var(--text-primary);
   margin-bottom: var(--spacing-3);
+  letter-spacing: var(--tracking-jp);
 }
 
 .stock-detail-description p {
+  font-family: var(--font-jp-sans);
   color: var(--text-secondary);
   line-height: var(--leading-relaxed);
 }
@@ -611,14 +746,18 @@ body.login-page::after {
 }
 
 .stock-detail-related h3 {
-  font-family: var(--font-display);
+  font-family: var(--font-jp-serif);
   font-size: var(--text-xl);
   font-weight: var(--font-semibold);
   color: var(--text-primary);
   margin-bottom: var(--spacing-5);
+  letter-spacing: var(--tracking-jp);
 }
 
-/* Responsive */
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
 @media (max-width: 1024px) {
   .stats-overview {
     grid-template-columns: repeat(2, 1fr);

@@ -5,6 +5,11 @@ import { dataPengguna, dataBahanAjar, dataTracking } from './data.js';
 import { Auth } from './auth.js';
 import { UI } from './ui.js';
 
+// Make data globally accessible for other modules
+window.dataBahanAjar = dataBahanAjar;
+window.dataPengguna = dataPengguna;
+window.dataTracking = dataTracking;
+
 export const App = {
   // Get greeting based on time of day
   getGreeting() {
@@ -75,8 +80,10 @@ export const App = {
     if (searchForm) {
       searchForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         this.searchTracking();
-      });
+        return false;
+      }, { passive: false });
     }
   },
 
@@ -94,9 +101,11 @@ export const App = {
 
     if (!result) {
       resultsContainer.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-icon">(>_<)</div>
-          <p class="empty-state-text">Data tracking tidak ditemukan untuk Nomor DO: ${doNumber}</p>
+        <div class="tracking-results-wrapper slide-up">
+          <div class="tracking-empty-state">
+            <div class="tracking-empty-icon">(>_<)</div>
+            <p class="tracking-empty-text">データが見つかりません — Data tracking tidak ditemukan untuk Nomor DO: ${doNumber}</p>
+          </div>
         </div>
       `;
       return;
@@ -104,44 +113,70 @@ export const App = {
 
     // Calculate progress based on journey length
     const progress = Math.min((result.perjalanan.length / PROGRESS_MAX_JOURNEY_STEPS) * 100, 100);
-    const statusClass = result.status === 'Selesai' || result.status === 'Dikirim' ? ALERT_TYPE.SUCCESS : ALERT_TYPE.WARNING;
 
-    // Render journey timeline
-    const journeyHTML = result.perjalanan.map(item => `
-      <div class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-time">${item.waktu}</div>
-        <div class="timeline-content">${item.keterangan}</div>
+    // Determine status styling
+    const isCompleted = result.status === 'Selesai' || result.status === 'Dikirim';
+
+    // Render journey timeline with Japanese aesthetic
+    const journeyHTML = result.perjalanan.map((item, index) => `
+      <div class="tracking-timeline-item ${index < result.perjalanan.length - 1 ? 'completed' : ''}">
+        <div class="tracking-timeline-dot"></div>
+        <div class="tracking-timeline-time">${item.waktu}</div>
+        <div class="tracking-timeline-content">${item.keterangan}</div>
       </div>
     `).join('');
 
     resultsContainer.innerHTML = `
-      <div class="card slide-up">
-        <h3 class="card-title">Hasil Pencarian</h3>
-        <div style="margin-bottom: var(--spacing-lg);">
-          <p><strong>Nama:</strong> ${result.nama}</p>
-          <p><strong>Nomor DO:</strong> ${result.nomorDO}</p>
-          <p><strong>Status:</strong> ${result.status}</p>
-          <div class="progress" style="margin-top: var(--spacing-sm);">
-            <div class="progress-bar ${statusClass}" style="width: ${progress}%"></div>
+      <div class="tracking-results-wrapper slide-up">
+        <div class="tracking-result-header">
+          <div>
+            <span class="tracking-result-badge">${result.status}</span>
+          </div>
+          <span class="tracking-result-title">検索結果</span>
+        </div>
+
+        <div class="tracking-info-grid">
+          <div class="tracking-info-item">
+            <div class="tracking-info-label">名前 / Nama</div>
+            <div class="tracking-info-value">${result.nama}</div>
+          </div>
+          <div class="tracking-info-item">
+            <div class="tracking-info-label">配送番号 / Nomor DO</div>
+            <div class="tracking-info-value small">${result.nomorDO}</div>
+          </div>
+          <div class="tracking-info-item">
+            <div class="tracking-info-label">配送業者 / Ekspedisi</div>
+            <div class="tracking-info-value small">${result.ekspedisi}</div>
           </div>
         </div>
 
-        <div style="margin-bottom: var(--spacing-lg);">
-          <h4 style="margin-bottom: var(--spacing-sm);">Detail Ekspedisi</h4>
-          <table class="table">
-            <tr><td>Ekspedisi</td><td>${result.ekspedisi}</td></tr>
-            <tr><td>Tanggal Kirim</td><td>${result.tanggalKirim}</td></tr>
-            <tr><td>Jenis Paket</td><td>${result.paket}</td></tr>
-            <tr><td>Total Pembayaran</td><td>${result.total}</td></tr>
-          </table>
+        <div class="tracking-info-grid" style="margin-bottom: var(--spacing-6);">
+          <div class="tracking-info-item">
+            <div class="tracking-info-label">発送日 / Tanggal Kirim</div>
+            <div class="tracking-info-value small">${result.tanggalKirim}</div>
+          </div>
+          <div class="tracking-info-item">
+            <div class="tracking-info-label">パケット種類 / Jenis Paket</div>
+            <div class="tracking-info-value small">${result.paket}</div>
+          </div>
+          <div class="tracking-info-item">
+            <div class="tracking-info-label">合計金額 / Total</div>
+            <div class="tracking-info-value small">${result.total}</div>
+          </div>
         </div>
 
-        <div>
-          <h4 style="margin-bottom: var(--spacing-sm);">Riwayat Perjalanan</h4>
-          <div class="timeline">
-            ${journeyHTML}
+        <div class="tracking-progress-section">
+          <div class="tracking-progress-header">
+            <span class="tracking-progress-title">進捗状況 / Progress</span>
+            <span class="tracking-progress-percentage">${Math.round(progress)}</span>
           </div>
+          <div class="tracking-progress-bar">
+            <div class="tracking-progress-fill" style="width: ${progress}%"></div>
+          </div>
+        </div>
+
+        <div class="tracking-timeline-wrapper">
+          ${journeyHTML}
         </div>
       </div>
     `;
@@ -495,73 +530,154 @@ export const App = {
       .filter(b => b.jenisBarang === item.jenisBarang && b.kodeBarang !== item.kodeBarang)
       .slice(0, RELATED_ITEMS_LIMIT);
 
+    // Determine stock status
+    let stockStatus = 'Tersedia';
+    let stockStatusClass = 'available';
+    if (item.stok === 0) {
+      stockStatus = 'Habis';
+      stockStatusClass = 'empty';
+    } else if (item.stok < 50) {
+      stockStatus = 'Terbatas';
+      stockStatusClass = 'limited';
+    }
+
     container.innerHTML = `
-      <div class="stock-detail slide-up">
-        <div class="stock-detail-header">
-          <div class="stock-detail-cover">
-            <img src="${item.cover}" alt="${item.namaBarang}" onerror="this.src='${IMG_DEFAULT_BOOK}'">
+      <!-- Hero Section -->
+      <div class="stok-detail-hero washi-texture">
+        <div class="stok-detail-hero-vertical">詳細</div>
+        <div class="stok-detail-hero-content">
+          <div class="stok-detail-hero-badge">
+            <span>${item.jenisBarang}</span>
+            <span>•</span>
+            <span>Edisi ${item.edisi}</span>
           </div>
-          <div class="stock-detail-info">
-            <h1 class="stock-detail-title">${item.namaBarang}</h1>
+          <h2 class="stok-detail-hero-title">${item.namaBarang}</h2>
+          <p class="stok-detail-hero-subtitle">Kode: ${item.kodeBarang} • Lokasi: ${item.kodeLokasi}</p>
+        </div>
+      </div>
 
-            <div class="stock-detail-meta">
-              <div class="stock-detail-meta-item">
-                <span class="stock-detail-meta-label">Kode Lokasi</span>
-                <span class="stock-detail-meta-value stock-detail-code">${item.kodeLokasi}</span>
+      <!-- Main Content -->
+      <div class="stok-detail-main">
+        <!-- Cover Section -->
+        <div class="stok-detail-cover-section">
+          <div class="stok-detail-cover-wrapper">
+            <div class="stok-detail-cover-image">
+              <img src="${item.cover}" alt="${item.namaBarang}" onerror="this.src='${IMG_DEFAULT_BOOK}'">
+              <div class="stok-detail-cover-badge">
+                <span class="stok-detail-cover-badge-label">Stok</span>
+                <span class="stok-detail-cover-badge-value">${item.stok}</span>
               </div>
-              <div class="stock-detail-meta-item">
-                <span class="stock-detail-meta-label">Kode Barang</span>
-                <span class="stock-detail-meta-value stock-detail-code">${item.kodeBarang}</span>
-              </div>
-              <div class="stock-detail-meta-item">
-                <span class="stock-detail-meta-label">Jenis</span>
-                <span class="stock-detail-meta-value">${item.jenisBarang}</span>
-              </div>
-              <div class="stock-detail-meta-item">
-                <span class="stock-detail-meta-label">Edisi</span>
-                <span class="stock-detail-meta-value">Edisi ${item.edisi}</span>
-              </div>
-            </div>
-
-            <div class="stock-detail-stock">
-              <span class="stock-detail-meta-label">Stok Tersedia</span>
-              <span class="stock-detail-stock-badge">${item.stok}</span>
-            </div>
-
-            <div class="stock-detail-actions">
-              <button class="btn btn-primary" data-action="back-to-stock">Kembali ke Daftar</button>
             </div>
           </div>
         </div>
 
-        <div class="stock-detail-description">
-          <h3>Deskripsi</h3>
-          <p>
-            Bahan ajar ${item.namaBarang} adalah materi pembelajaran untuk kode mata kuliah ${item.kodeBarang}.
-            Bahan ajar ini termasuk dalam kategori ${item.jenisBarang} dan tersedia dalam edisi ke-${item.edisi}.
-            Stok saat ini tersedia sebanyak ${item.stok} unit.
-          </p>
-        </div>
+        <!-- Info Section -->
+        <div class="stok-detail-info-section">
+          <!-- Title -->
+          <div class="stok-detail-title-section">
+            <h1 class="stok-detail-main-title">${item.namaBarang}</h1>
+            <p class="stok-detail-subtitle">Bahan ajar untuk kode mata kuliah ${item.kodeBarang}</p>
+          </div>
 
-        ${relatedItems.length > 0 ? `
-          <div class="stock-detail-related">
-            <h3>Bahan Ajar Lainnya (${item.jenisBarang})</h3>
-            <div class="stock-grid-container">
-              ${relatedItems.map(related => `
-                <div class="stock-card" data-action="view-related-item" data-kode="${related.kodeBarang}" style="cursor: pointer;">
-                  <div class="stock-card-cover">
-                    <img src="${related.cover}" alt="${related.namaBarang}" onerror="this.src='${IMG_DEFAULT_BOOK}'">
-                    <span class="stock-card-badge">${related.stok}</span>
-                  </div>
-                  <div class="stock-card-content">
-                    <h3 class="stock-card-title">${related.namaBarang}</h3>
-                    <span class="stock-card-code">${related.kodeBarang}</span>
-                  </div>
+          <!-- Meta Grid -->
+          <div class="stok-detail-meta-grid">
+            <div class="stok-detail-meta-card">
+              <div class="stok-detail-meta-label">
+                <span class="stok-detail-meta-label-jp">場所</span>
+                <span>Kode Lokasi</span>
+              </div>
+              <div class="stok-detail-meta-value code">${item.kodeLokasi}</div>
+            </div>
+
+            <div class="stok-detail-meta-card">
+              <div class="stok-detail-meta-label">
+                <span class="stok-detail-meta-label-jp">商品</span>
+                <span>Kode Barang</span>
+              </div>
+              <div class="stok-detail-meta-value code">${item.kodeBarang}</div>
+            </div>
+
+            <div class="stok-detail-meta-card">
+              <div class="stok-detail-meta-label">
+                <span class="stok-detail-meta-label-jp">種類</span>
+                <span>Jenis</span>
+              </div>
+              <div class="stok-detail-meta-value badge">${item.jenisBarang}</div>
+            </div>
+
+            <div class="stok-detail-meta-card">
+              <div class="stok-detail-meta-label">
+                <span class="stok-detail-meta-label-jp">版</span>
+                <span>Edisi</span>
+              </div>
+              <div class="stok-detail-meta-value">Edisi ${item.edisi}</div>
+            </div>
+          </div>
+
+          <!-- Stock Display -->
+          <div class="stok-detail-stock-display">
+            <div class="stok-detail-stock-label">Stok Tersedia</div>
+            <div class="stok-detail-stock-value" data-unit="unit">${item.stok}</div>
+            <div class="stok-detail-stock-status">${stockStatus}</div>
+          </div>
+
+          <!-- Actions -->
+          <div class="stok-detail-actions">
+            <a href="stok.html" class="stok-detail-action-btn primary" data-action="back-to-stock">
+              <span>← Kembali ke Daftar</span>
+            </a>
+            <button class="stok-detail-action-btn secondary" data-action="edit-item" data-kode="${item.kodeBarang}">
+              <span>Edit Data</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Description Section -->
+      <div class="stok-detail-description-section">
+        <div class="stok-detail-description-header">
+          <span class="stok-detail-description-label-jp">説明</span>
+          <h3 class="stok-detail-description-title">Deskripsi Produk</h3>
+        </div>
+        <p class="stok-detail-description-text">
+          Bahan ajar ${item.namaBarang} adalah materi pembelajaran untuk kode mata kuliah ${item.kodeBarang}.
+          Bahan ajar ini termasuk dalam kategori ${item.jenisBarang} dan tersedia dalam edisi ke-${item.edisi}.
+          Stok saat ini tersedia sebanyak ${item.stok} unit di lokasi ${item.kodeLokasi}.
+        </p>
+      </div>
+
+      ${relatedItems.length > 0 ? `
+        <!-- Related Items -->
+        <div class="stok-detail-related-section">
+          <div class="stok-detail-related-header">
+            <span class="stok-detail-related-label-jp">関連</span>
+            <h3 class="stok-detail-related-title">Bahan Ajar Lainnya (${item.jenisBarang})</h3>
+          </div>
+          <div class="stok-detail-related-grid">
+            ${relatedItems.map(related => `
+              <div class="stock-card" data-action="view-related-item" data-kode="${related.kodeBarang}" style="cursor: pointer;">
+                <div class="stock-card-cover">
+                  <img src="${related.cover}" alt="${related.namaBarang}" onerror="this.src='${IMG_DEFAULT_BOOK}'">
+                  <span class="stock-card-badge">${related.stok}</span>
                 </div>
-              `).join('')}
-            </div>
+                <div class="stock-card-content">
+                  <h3 class="stock-card-title">${related.namaBarang}</h3>
+                  <span class="stock-card-code">${related.kodeBarang}</span>
+                </div>
+              </div>
+            `).join('')}
           </div>
-        ` : ''}
+        </div>
+      ` : ''}
+
+      <!-- Footer -->
+      <div class="stok-detail-footer">
+        <div class="stok-detail-footer-pattern"></div>
+        <div class="stok-detail-footer-content">
+          <span class="stok-detail-footer-text-jp">教材詳細システム</span>
+          <span class="stok-detail-footer-divider">|</span>
+          <span class="stok-detail-footer-text">Sistem Detail Bahan Ajar SITTA</span>
+        </div>
       </div>
     `;
   }

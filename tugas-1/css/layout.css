@@ -1,5 +1,7 @@
-/* Modern Japanese Brand - Layout */
-/* Clean, minimalist, purposeful */
+/* ========================================
+   JAPANESE CREATIVE AESTHETIC - Layout
+   SITTA - Asymmetric Beauty, Traditional Elements
+   ======================================== */
 
 /* Reset & Base */
 *,
@@ -18,22 +20,42 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-jp-sans);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
   letter-spacing: var(--tracking-normal);
   color: var(--text-primary);
   background-color: var(--bg-primary);
   overflow-x: hidden;
+  position: relative;
 }
 
-/* App Container */
+/* Subtle washi paper texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='washiNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23washiNoise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========================================
+   APP CONTAINER
+   ======================================== */
+
 .app-container {
   display: flex;
   min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
-/* Sidebar - Modern, clean */
+/* ========================================
+   SIDEBAR - Japanese Navigation
+   ======================================== */
+
 .sidebar {
   width: var(--sidebar-width);
   background: var(--bg-elevated);
@@ -43,19 +65,56 @@ body {
   position: fixed;
   height: 100vh;
   z-index: 1050;
-  transition: transform var(--duration-300) var(--ease-default);
+  transition: transform var(--duration-300) var(--ease-jp);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Decorative vertical line in sidebar */
+.sidebar::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 80px;
+  bottom: 120px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent-primary) 10%,
+    var(--accent-primary) 90%,
+    transparent
+  );
+  opacity: 0.2;
 }
 
 .sidebar-header {
   padding: var(--spacing-6) var(--spacing-6);
   border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+/* Decorative accent in header */
+.sidebar-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--spacing-6);
+  right: var(--spacing-6);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-primary) 50%,
+    transparent
+  );
+  opacity: 0.3;
 }
 
 .sidebar-brand {
-  font-family: var(--font-display);
+  font-family: var(--font-jp-serif);
   font-size: var(--text-2xl);
   font-weight: var(--font-bold);
-  letter-spacing: var(--tracking-wider);
+  letter-spacing: var(--tracking-jp);
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -63,9 +122,9 @@ body {
 }
 
 .sidebar-brand-icon {
-  width: 36px;
-  height: 36px;
-  background: var(--accent-primary);
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
@@ -73,6 +132,31 @@ body {
   color: white;
   font-size: var(--text-lg);
   font-weight: var(--font-bold);
+  box-shadow: var(--shadow-jp);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated shine effect on brand icon */
+.sidebar-brand-icon::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: iconShine 3s ease-in-out infinite;
+}
+
+@keyframes iconShine {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .sidebar-nav {
@@ -81,6 +165,7 @@ body {
   overflow-y: auto;
 }
 
+/* Navigation Items with Japanese Style */
 .nav-item {
   display: flex;
   align-items: center;
@@ -91,11 +176,13 @@ body {
   border-radius: var(--radius-md);
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
-  transition: all var(--duration-150) var(--ease-default);
+  transition: all var(--duration-200) var(--ease-jp);
   margin-bottom: var(--spacing-1);
   position: relative;
+  letter-spacing: var(--tracking-wide);
 }
 
+/* Vertical accent bar */
 .nav-item::before {
   content: '';
   position: absolute;
@@ -104,18 +191,19 @@ body {
   transform: translateY(-50%);
   width: 3px;
   height: 0;
-  background: var(--accent-primary);
+  background: linear-gradient(to bottom, var(--accent-primary), var(--accent-hover));
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  transition: height var(--duration-150) var(--ease-default);
+  transition: height var(--duration-200) var(--ease-jp);
 }
 
 .nav-item:hover {
   background: var(--bg-tertiary);
   color: var(--text-primary);
+  transform: translateX(4px);
 }
 
 .nav-item:hover::before {
-  height: 20px;
+  height: 24px;
 }
 
 .nav-item.active {
@@ -124,7 +212,8 @@ body {
 }
 
 .nav-item.active::before {
-  height: 20px;
+  height: 24px;
+  box-shadow: 0 0 8px rgba(199, 62, 58, 0.4);
 }
 
 .sidebar-footer {
@@ -135,17 +224,35 @@ body {
   gap: var(--spacing-2);
 }
 
-/* Main Content */
+/* ========================================
+   MAIN CONTENT
+   ======================================== */
+
 .main-content {
   flex: 1;
   margin-left: var(--sidebar-width);
   min-height: 100vh;
   background: var(--bg-secondary);
-  transition: margin-left var(--duration-300) var(--ease-default);
+  transition: margin-left var(--duration-300) var(--ease-jp);
   overflow-x: hidden;
+  position: relative;
 }
 
-/* Header */
+/* Subtle background pattern */
+.main-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(199, 62, 58, 0.02) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(27, 43, 74, 0.02) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* ========================================
+   HEADER - Japanese Style
+   ======================================== */
+
 .header {
   height: var(--header-height);
   background: var(--bg-elevated);
@@ -156,6 +263,26 @@ body {
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Bottom accent line */
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-primary) 50%,
+    transparent
+  );
+  opacity: 0.2;
 }
 
 .header-content {
@@ -163,10 +290,10 @@ body {
 }
 
 .page-title {
-  font-family: var(--font-display);
+  font-family: var(--font-jp-serif);
   font-size: var(--text-xl);
   font-weight: var(--font-semibold);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-jp);
   color: var(--text-primary);
 }
 
@@ -176,16 +303,23 @@ body {
   gap: var(--spacing-4);
 }
 
-/* Content Area */
+/* ========================================
+   CONTENT AREA
+   ======================================== */
+
 .content {
   padding: var(--spacing-6);
   max-width: var(--content-max-width);
   margin: 0 auto;
   overflow-x: hidden;
   width: 100%;
+  position: relative;
 }
 
-/* Grid System */
+/* ========================================
+   GRID SYSTEM - Asymmetric Japanese Layout
+   ======================================== */
+
 .grid {
   display: grid;
   gap: var(--spacing-6);
@@ -203,15 +337,32 @@ body {
   grid-template-columns: repeat(4, 1fr);
 }
 
-/* Sidebar Overlay */
+/* Asymmetric grid options */
+.grid-asymmetric-2-1 {
+  grid-template-columns: 2fr 1fr;
+}
+
+.grid-asymmetric-1-2 {
+  grid-template-columns: 1fr 2fr;
+}
+
+.grid-masonry {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* ========================================
+   SIDEBAR OVERLAY
+   ======================================== */
+
 .sidebar-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(4px);
   z-index: 1040;
   opacity: 0;
   visibility: hidden;
-  transition: all var(--duration-300) var(--ease-default);
+  transition: all var(--duration-300) var(--ease-jp);
 }
 
 .sidebar-overlay.active {
@@ -219,7 +370,10 @@ body {
   visibility: visible;
 }
 
-/* Sidebar Toggle */
+/* ========================================
+   SIDEBAR TOGGLE
+   ======================================== */
+
 .sidebar-toggle {
   display: none;
   width: 40px;
@@ -230,14 +384,52 @@ body {
   cursor: pointer;
   font-size: var(--text-xl);
   color: var(--text-secondary);
-  transition: all var(--duration-150) var(--ease-default);
+  transition: all var(--duration-200) var(--ease-jp);
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+/* Hamburger animation */
+.sidebar-toggle::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background: var(--text-secondary);
+  transition: all var(--duration-200) var(--ease-jp);
+}
+
+.sidebar-toggle::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background: var(--text-secondary);
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all var(--duration-200) var(--ease-jp);
 }
 
 .sidebar-toggle:hover {
   background: var(--bg-tertiary);
   color: var(--text-primary);
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Japanese vertical text */
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Text alignment with Japanese consideration */
+.text-justify-jp {
+  text-align: justify;
+  text-justify: inter-ideograph;
 }
 
 /* Responsive */
@@ -248,6 +440,11 @@ body {
 
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-asymmetric-2-1,
+  .grid-asymmetric-1-2 {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -296,5 +493,67 @@ body {
     font-size: var(--text-xs);
     color: var(--text-secondary);
     margin-top: 2px;
+    font-family: var(--font-jp-sans);
   }
+}
+
+/* ========================================
+   DECORATIVE ELEMENTS
+   ======================================== */
+
+/* Japanese corner accent */
+.jp-corner-accent {
+  position: relative;
+}
+
+.jp-corner-accent::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: -16px;
+  width: 32px;
+  height: 32px;
+  border-top: 2px solid var(--accent-primary);
+  border-left: 2px solid var(--accent-primary);
+  opacity: 0.3;
+}
+
+/* Vertical divider */
+.jp-divider {
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent-primary) 10%,
+    var(--accent-primary) 90%,
+    transparent
+  );
+  opacity: 0.2;
+}
+
+/* Horizontal divider with gradient */
+.jp-hr {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-default) 20%,
+    var(--border-default) 80%,
+    transparent
+  );
+  border: none;
+  margin: var(--spacing-6) 0;
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+
+[data-theme="dark"] .header {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+[data-theme="dark"] .page-title {
+  color: var(--text-primary);
 }

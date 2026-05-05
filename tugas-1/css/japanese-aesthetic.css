@@ -1,0 +1,441 @@
+/* ========================================
+   JAPANESE CREATIVE AESTHETIC
+   SITTA - Complete Visual Redesign
+   ======================================== */
+
+/* Japanese Design Philosophy: "間" (Ma) - Negative Space
+   Bold asymmetry, traditional elements meeting modern minimalism */
+
+/* ========================================
+   TYPOGRAPHY SYSTEM
+   ======================================== */
+
+/* Import distinctive Japanese fonts */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap');
+
+/* Font family assignments */
+:root {
+  /* Serif - Traditional Japanese elegance */
+  --font-jp-serif: 'Shippori Mincho', 'Noto Serif JP', serif;
+
+  /* Sans-serif - Modern Japanese clarity */
+  --font-jp-sans: 'Zen Maru Gothic', 'Noto Sans JP', sans-serif;
+
+  /* Monospace - Technical precision */
+  --font-jp-mono: 'Osaka-Mono', 'MS Gothic', 'VT323', monospace;
+
+  /* Display - Bold headlines */
+  --font-jp-display: 'Shippori Mincho', serif;
+}
+
+/* Vertical writing mode support */
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* ========================================
+   COLOR PALETTE - Traditional Japanese
+   ======================================== */
+
+:root {
+  /* Primary - 桜色 (Sakura) - Cherry blossom inspired */
+  --jp-sakura: #F8C3CD;
+  --jp-sakura-deep: #E87A8A;
+  --jp-sakura-pale: #FDE8EC;
+
+  /* Accent - 紅緋 (Benihi) - Traditional crimson */
+  --jp-crimson: #C73E3A;
+  --jp-crimson-dark: #9E2B28;
+  --jp-crimson-light: #E85A54;
+
+  /* Neutral - 和色 (Washiro) - Japanese whites */
+  --jp-paper: #FAF8F5;
+  --jp-washi: #F0EBE5;
+  --jp-sumi: #1A1A1A;
+  --jp-ink: #0D0D0D;
+
+  /* Secondary - 藍色 (Ai-iro) - Indigo */
+  --jp-indigo: #1B2B4A;
+  --jp-indigo-light: #2D426B;
+  --jp-indigo-pale: #E8ECF0;
+
+  /* Accent - 金色 (Kin-iro) - Gold */
+  --jp-gold: #D4A574;
+  --jp-gold-light: #E8C9A8;
+  --jp-gold-dark: #B88B5A;
+
+  /* Nature - 竹色 (Take-iro) - Bamboo */
+  --jp-bamboo: #6B8E23;
+  --jp-bamboo-light: #8FBC4A;
+  --jp-moss: #4A6741;
+
+  /* Semantic */
+  --jp-success: #4A7C59;
+  --jp-warning: #D4A574;
+  --jp-error: #C73E3A;
+  --jp-info: #2D426B;
+}
+
+/* ========================================
+   TEXTURAL OVERLAYS
+   ======================================== */
+
+/* Washi paper texture */
+.washi-texture {
+  position: relative;
+}
+
+.washi-texture::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='washiNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23washiNoise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Grain overlay */
+.grain-overlay {
+  position: relative;
+}
+
+.grain-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.08'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ========================================
+   DECORATIVE ELEMENTS
+   ======================================== */
+
+/* Japanese seal/stamp style */
+.jp-seal {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--jp-crimson);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-jp-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--jp-crimson);
+  background: var(--jp-paper);
+  box-shadow:
+    inset 0 0 0 2px var(--jp-crimson),
+    0 2px 8px rgba(199, 62, 58, 0.3);
+}
+
+/* Vertical line divider */
+.jp-divider-vertical {
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--jp-crimson) 10%,
+    var(--jp-crimson) 90%,
+    transparent
+  );
+  opacity: 0.3;
+}
+
+/* Corner accent - inspired by Japanese frames */
+.jp-corner {
+  position: relative;
+}
+
+.jp-corner::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: -16px;
+  width: 32px;
+  height: 32px;
+  border-top: 2px solid var(--jp-gold);
+  border-left: 2px solid var(--jp-gold);
+  opacity: 0.5;
+}
+
+/* Horizontal line with Japanese aesthetic */
+.jp-line {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--jp-crimson) 20%,
+    var(--jp-crimson) 80%,
+    transparent
+  );
+  opacity: 0.4;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+/* Brush stroke reveal */
+@keyframes brushReveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* Floating - gentle Japanese animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Fade in from left - Japanese reading direction */
+@keyframes fadeFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale with rotation */
+@keyframes scaleRotate {
+  0% {
+    transform: scale(0.8) rotate(-2deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+/* Shimmer for progress bars */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Pulse for status indicators */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+}
+
+/* Apply animations */
+.brush-reveal {
+  animation: brushReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.float-gentle {
+  animation: float 4s ease-in-out infinite;
+}
+
+.fade-left {
+  animation: fadeFromLeft 0.6s ease-out forwards;
+}
+
+.scale-rotate {
+  animation: scaleRotate 0.5s ease-out forwards;
+}
+
+/* ========================================
+   COMPONENT ENHANCEMENTS
+   ======================================== */
+
+/* Cards with Japanese aesthetic */
+.jp-card {
+  background: var(--jp-paper);
+  border: 1px solid rgba(199, 62, 58, 0.1);
+  border-radius: 4px;
+  padding: var(--spacing-6);
+  position: relative;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.jp-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--jp-crimson) 50%,
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.jp-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 16px 32px rgba(0, 0, 0, 0.1);
+  border-color: rgba(199, 62, 58, 0.2);
+}
+
+.jp-card:hover::before {
+  opacity: 1;
+}
+
+/* Buttons with Japanese style */
+.jp-btn {
+  font-family: var(--font-jp-sans);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.jp-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.jp-btn:hover::before {
+  left: 100%;
+}
+
+.jp-btn-primary {
+  background: var(--jp-crimson);
+  color: white;
+  box-shadow: 0 2px 8px rgba(199, 62, 58, 0.3);
+}
+
+.jp-btn-primary:hover {
+  background: var(--jp-crimson-dark);
+  box-shadow: 0 4px 12px rgba(199, 62, 58, 0.4);
+  transform: translateY(-2px);
+}
+
+.jp-btn-secondary {
+  background: var(--jp-indigo);
+  color: white;
+  box-shadow: 0 2px 8px rgba(27, 43, 74, 0.3);
+}
+
+.jp-btn-secondary:hover {
+  background: var(--jp-indigo-light);
+  box-shadow: 0 4px 12px rgba(27, 43, 74, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Form inputs */
+.jp-input {
+  font-family: var(--font-jp-sans);
+  background: var(--jp-paper);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  padding: 12px 16px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.jp-input:focus {
+  outline: none;
+  border-color: var(--jp-crimson);
+  box-shadow: 0 0 0 3px rgba(199, 62, 58, 0.1);
+}
+
+/* ========================================
+   PAGE SPECIFIC STYLES
+   ======================================== */
+
+/* Body background with subtle pattern */
+body {
+  background-color: var(--jp-washi);
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(199, 62, 58, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(27, 43, 74, 0.03) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.jp-text-serif { font-family: var(--font-jp-serif); }
+.jp-text-sans { font-family: var(--font-jp-sans); }
+.jp-text-mono { font-family: var(--font-jp-mono); }
+.jp-text-display { font-family: var(--font-jp-display); }
+
+.jp-text-crimson { color: var(--jp-crimson); }
+.jp-text-indigo { color: var(--jp-indigo); }
+.jp-text-gold { color: var(--jp-gold); }
+
+.jp-bg-paper { background: var(--jp-paper); }
+.jp-bg-washi { background: var(--jp-washi); }
+
+.jp-washi { @extend .washi-texture; }
+.jp-grain { @extend .grain-overlay; }
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 768px) {
+  .jp-seal {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .jp-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .jp-card {
+    padding: var(--spacing-4);
+  }
+}

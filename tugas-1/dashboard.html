@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - SITTA</title>
+  <title>Dashboard - SITTA | 仕繍た</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/japanese-aesthetic.css">
+  <link rel="stylesheet" href="css/dashboard-custom.css">
 </head>
 <body>
   <div class="app-container">
@@ -50,148 +52,251 @@
       <header class="header">
         <button class="sidebar-toggle" aria-label="Toggle sidebar">≡</button>
         <div class="header-content" id="headerContent">
-          <h1 class="page-title">Dashboard</h1>
+          <h1 class="page-title">
+            <span class="jp-title-main">Dashboard</span>
+            <span class="jp-title-sub">ダッシュボード</span>
+          </h1>
         </div>
         <div class="header-actions">
-          <span id="greeting" class="text-secondary"></span>
+          <span id="greeting" class="text-secondary jp-greeting"></span>
         </div>
       </header>
 
       <div class="content">
-        <!-- Stats Overview -->
-        <div class="stats-overview stagger-children">
-          <div class="stat-card slide-up">
-            <div class="stat-icon" style="background: var(--accent-subtle); color: var(--accent-primary);">(_|_)</div>
-            <div class="stat-content">
-              <div class="stat-value" id="statTotalItems">0</div>
+        <!-- Japanese Hero Section -->
+        <section class="dashboard-hero washi-texture" aria-label="Selamat datang">
+          <!-- Vertical Date Display -->
+          <time class="hero-vertical" datetime="">
+            <div class="vertical-text jp-date-display">
+              <span class="jp-date-year" id="jpYear"></span>
+              <span class="jp-date-month" id="jpMonth"></span>
+              <span class="jp-date-day" id="jpDay"></span>
+            </div>
+          </time>
+
+          <!-- Main Hero Content -->
+          <div class="hero-content">
+            <div class="hero-greeting">
+              <span class="hero-greeting-jp" id="heroGreetingJP"></span>
+              <span class="hero-greeting-id" id="heroGreetingID"></span>
+            </div>
+            <p class="hero-subtitle">Sistem Informasi Bahan Ajar — Universitas Terbuka</p>
+          </div>
+
+          <!-- Decorative Seal -->
+          <div class="hero-seal" aria-hidden="true">
+            <div class="jp-seal seal-stamp">S</div>
+          </div>
+        </section>
+
+        <!-- Stats Overview - Japanese Bento Grid -->
+        <section class="dashboard-section" aria-labelledby="statsTitle">
+          <header class="section-header-with-deco">
+            <span class="section-label-jp">統計</span>
+            <h2 class="section-title" id="statsTitle">Statistik Ringkas</h2>
+          </header>
+
+          <div class="stats-bento-grid" role="list">
+            <!-- Large Primary Stat -->
+            <article class="stat-card-large slide-up" style="animation-delay: 0ms;" role="listitem">
+              <div class="stat-card-deco" aria-hidden="true"></div>
+              <div class="stat-card-header">
+                <span class="stat-label-jp">教材</span>
+                <span class="stat-icon-large" aria-hidden="true">(_|_)</span>
+              </div>
+              <div class="stat-value-jp" id="statTotalItems">0</div>
               <div class="stat-label">Total Bahan Ajar</div>
+            </article>
+
+            <!-- Secondary Stats Row -->
+            <div class="stats-row">
+              <article class="stat-card-compact slide-up" style="animation-delay: 75ms;" role="listitem">
+                <div class="stat-icon-wrapper" style="background: var(--success-subtle);">
+                  <span class="stat-icon-compact" style="color: var(--success);" aria-hidden="true">(^_^)</span>
+                </div>
+                <div class="stat-content-compact">
+                  <div class="stat-value-compact" id="statTotalStock">0</div>
+                  <div class="stat-label-compact">Total Stok</div>
+                </div>
+              </article>
+
+              <article class="stat-card-compact slide-up" style="animation-delay: 150ms;" role="listitem">
+                <div class="stat-icon-wrapper" style="background: var(--warning-subtle);">
+                  <span class="stat-icon-compact" style="color: var(--warning);" aria-hidden="true">(>_<)</span>
+                </div>
+                <div class="stat-content-compact">
+                  <div class="stat-value-compact" id="statShippingCount">0</div>
+                  <div class="stat-label-compact">Sedang Dikirim</div>
+                </div>
+              </article>
+
+              <article class="stat-card-compact slide-up" style="animation-delay: 225ms;" role="listitem">
+                <div class="stat-icon-wrapper" style="background: var(--info-subtle);">
+                  <span class="stat-icon-compact" style="color: var(--info);" aria-hidden="true">[*]</span>
+                </div>
+                <div class="stat-content-compact">
+                  <div class="stat-value-compact" id="statUpbjjCount">0</div>
+                  <div class="stat-label-compact">UPBJJ Aktif</div>
+                </div>
+              </article>
             </div>
           </div>
+        </section>
 
-          <div class="stat-card slide-up" style="animation-delay: 75ms;">
-            <div class="stat-icon" style="background: var(--success-subtle); color: var(--success);">(^_^)</div>
-            <div class="stat-content">
-              <div class="stat-value" id="statTotalStock">0</div>
-              <div class="stat-label">Total Stok</div>
+        <!-- Quick Actions - Horizontal Flow -->
+        <section class="dashboard-section" aria-labelledby="actionsTitle">
+          <header class="section-header-with-deco">
+            <span class="section-label-jp">アクション</span>
+            <h2 class="section-title" id="actionsTitle">Aksi Cepat</h2>
+          </header>
+
+          <nav class="quick-actions-flow stagger-children" aria-label="Aksi cepat">
+            <a href="stok.html" class="action-card-jp slide-up">
+              <div class="action-card-inner">
+                <div class="action-icon-jp" aria-hidden="true">＋</div>
+                <div class="action-content-jp">
+                  <span class="action-title-jp">Stok Baru</span>
+                  <span class="action-desc-jp">Tambah bahan ajar</span>
+                </div>
+                <div class="action-arrow" aria-hidden="true">→</div>
+              </div>
+            </a>
+
+            <a href="tracking.html" class="action-card-jp slide-up" style="animation-delay: 50ms;">
+              <div class="action-card-inner">
+                <div class="action-icon-jp" aria-hidden="true">(O_O)</div>
+                <div class="action-content-jp">
+                  <span class="action-title-jp">Lacak Pengiriman</span>
+                  <span class="action-desc-jp">Cek status pengiriman</span>
+                </div>
+                <div class="action-arrow" aria-hidden="true">→</div>
+              </div>
+            </a>
+
+            <div class="action-card-jp slide-up" style="animation-delay: 100ms;" role="button" tabindex="0">
+              <div class="action-card-inner">
+                <div class="action-icon-jp" aria-hidden="true">[|]</div>
+                <div class="action-content-jp">
+                  <span class="action-title-jp">Export Laporan</span>
+                  <span class="action-desc-jp">Unduh laporan bulanan</span>
+                </div>
+                <div class="action-arrow" aria-hidden="true">→</div>
+              </div>
             </div>
-          </div>
+          </nav>
+        </section>
 
-          <div class="stat-card slide-up" style="animation-delay: 150ms;">
-            <div class="stat-icon" style="background: var(--warning-subtle); color: var(--warning);">(>_<)</div>
-            <div class="stat-content">
-              <div class="stat-value" id="statShippingCount">0</div>
-              <div class="stat-label">Sedang Dikirim</div>
+        <!-- Navigation Grid - Asymmetric Layout -->
+        <section class="dashboard-section" aria-labelledby="menuTitle">
+          <header class="section-header-with-deco">
+            <span class="section-label-jp">メニュー</span>
+            <h2 class="section-title" id="menuTitle">Menu Utama</h2>
+          </header>
+
+          <nav class="nav-grid-asymmetric" aria-label="Menu navigasi utama">
+            <!-- Featured Large Card -->
+            <a href="stok.html" class="nav-card-featured slide-up" style="animation-delay: 0ms;">
+              <div class="nav-card-featured-bg" aria-hidden="true"></div>
+              <div class="nav-card-featured-content">
+                <div class="nav-card-featured-icon" aria-hidden="true">(^^)</div>
+                <h3 class="nav-card-featured-title">Informasi Bahan Ajar</h3>
+                <p class="nav-card-featured-desc">Lihat daftar dan stok bahan ajar yang tersedia</p>
+                <div class="nav-card-featured-footer">
+                  <span class="nav-card-featured-label">教材情報</span>
+                  <span class="nav-card-featured-arrow" aria-hidden="true">→</span>
+                </div>
+              </div>
+            </a>
+
+            <!-- Secondary Cards Column -->
+            <div class="nav-cards-column">
+              <a href="tracking.html" class="nav-card-secondary slide-up" style="animation-delay: 75ms;">
+                <div class="nav-card-secondary-left">
+                  <span class="nav-card-secondary-icon" aria-hidden="true">(>_<)</span>
+                </div>
+                <div class="nav-card-secondary-right">
+                  <h4 class="nav-card-secondary-title">Tracking Pengiriman</h4>
+                  <span class="nav-card-secondary-label">配送追跡</span>
+                </div>
+              </a>
+
+              <div class="nav-card-secondary slide-up" style="animation-delay: 150ms;" role="button" tabindex="0">
+                <div class="nav-card-secondary-left">
+                  <span class="nav-card-secondary-icon" aria-hidden="true">(_|_)</span>
+                </div>
+                <div class="nav-card-secondary-right">
+                  <h4 class="nav-card-secondary-title">Monitoring Progress DO</h4>
+                  <span class="nav-card-secondary-label">進捗監視</span>
+                </div>
+              </div>
+
+              <div class="nav-card-secondary slide-up" style="animation-delay: 225ms;" role="button" tabindex="0">
+                <div class="nav-card-secondary-left">
+                  <span class="nav-card-secondary-icon">[||]</span>
+                </div>
+                <div class="nav-card-secondary-right">
+                  <h4 class="nav-card-secondary-title">Rekap Bahan Ajar</h4>
+                  <span class="nav-card-secondary-label">教材集計</span>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div class="stat-card slide-up" style="animation-delay: 225ms;">
-            <div class="stat-icon" style="background: var(--info-subtle); color: var(--info);">[*]</div>
-            <div class="stat-content">
-              <div class="stat-value" id="statUpbjjCount">0</div>
-              <div class="stat-label">UPBJJ Aktif</div>
+            <!-- Tertiary Cards Row -->
+            <div class="nav-cards-row">
+              <div class="nav-card-tertiary slide-up" style="animation-delay: 300ms;">
+                <span class="nav-card-tertiary-icon">/↑\</span>
+                <div class="nav-card-tertiary-content">
+                  <h4 class="nav-card-tertiary-title">Laporan</h4>
+                  <span class="nav-card-tertiary-label">レポート</span>
+                </div>
+              </div>
+
+              <div class="nav-card-tertiary slide-up" style="animation-delay: 375ms;">
+                <span class="nav-card-tertiary-icon">(time)</span>
+                <div class="nav-card-tertiary-content">
+                  <h4 class="nav-card-tertiary-title">Histori Transaksi</h4>
+                  <span class="nav-card-tertiary-label">取引履歴</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="section-header">
-          <h2 class="section-title">Aksi Cepat</h2>
-        </div>
-        <div class="quick-actions stagger-children">
-          <a href="stok.html" class="action-card slide-up">
-            <div class="action-icon">+</div>
-            <div class="action-content">
-              <div class="action-title">Tambah Stok</div>
-              <div class="action-desc">Tambah bahan ajar baru</div>
-            </div>
-          </a>
-
-          <a href="tracking.html" class="action-card slide-up" style="animation-delay: 50ms;">
-            <div class="action-icon">(O_O)</div>
-            <div class="action-content">
-              <div class="action-title">Lacak Pengiriman</div>
-              <div class="action-desc">Cek status pengiriman</div>
-            </div>
-          </a>
-
-          <div class="action-card slide-up" style="animation-delay: 100ms;">
-            <div class="action-icon">[|]</div>
-            <div class="action-content">
-              <div class="action-title">Export Laporan</div>
-              <div class="action-desc">Unduh laporan bulanan</div>
-            </div>
+        <!-- Footer with Japanese Pattern -->
+        <footer class="dashboard-footer">
+          <div class="footer-pattern" aria-hidden="true"></div>
+          <div class="footer-content">
+            <span class="footer-text-jp">© 令和６年</span>
+            <span class="footer-divider" aria-hidden="true">|</span>
+            <span class="footer-text">SITTA — Sistem Informasi Bahan Ajar</span>
           </div>
-        </div>
-
-        <!-- Navigation Cards -->
-        <div class="section-header">
-          <h2 class="section-title">Menu Utama</h2>
-        </div>
-        <div class="dashboard-cards grid grid-3 stagger-children">
-          <div class="nav-card slide-up" data-href="stok.html">
-            <div class="nav-card-icon">(^^)</div>
-            <div class="nav-card-title">Informasi Bahan Ajar</div>
-            <div class="nav-card-desc">Lihat daftar dan stok bahan ajar yang tersedia</div>
-          </div>
-
-          <div class="nav-card slide-up" data-href="tracking.html" style="animation-delay: 50ms;">
-            <div class="nav-card-icon">(>_<)</div>
-            <div class="nav-card-title">Tracking Pengiriman</div>
-            <div class="nav-card-desc">Lacak status pengiriman bahan ajar</div>
-          </div>
-
-          <div class="nav-card slide-up" style="animation-delay: 100ms;">
-            <div class="nav-card-icon">(_|_)</div>
-            <div class="nav-card-title">Monitoring Progress DO</div>
-            <div class="nav-card-desc">Monitor progress delivery order bahan ajar</div>
-          </div>
-
-          <div class="nav-card slide-up" style="animation-delay: 150ms;">
-            <div class="nav-card-icon">[||]</div>
-            <div class="nav-card-title">Rekap Bahan Ajar</div>
-            <div class="nav-card-desc">Rekapitulasi data bahan ajar per periode</div>
-          </div>
-
-          <div class="nav-card slide-up" style="animation-delay: 200ms;">
-            <div class="nav-card-icon">/↑\</div>
-            <div class="nav-card-title">Laporan</div>
-            <div class="nav-card-desc">Lihat laporan pemesanan dan distribusi</div>
-          </div>
-
-          <div class="nav-card slide-up" style="animation-delay: 250ms;">
-            <div class="nav-card-icon">(time)</div>
-            <div class="nav-card-title">Histori Transaksi</div>
-            <div class="nav-card-desc">Riwayat transaksi bahan ajar sebelumnya</div>
-          </div>
-        </div>
+        </footer>
       </div>
     </main>
   </div>
 
   <!-- Logout Confirmation Modal -->
   <div class="modal-backdrop" id="logoutModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title">Konfirmasi Logout</h2>
-        <button class="modal-close">&times;</button>
-      </div>
+    <div class="modal" role="dialog" aria-labelledby="logoutTitle">
+      <header class="modal-header">
+        <h2 class="modal-title" id="logoutTitle">Konfirmasi Logout</h2>
+        <button class="modal-close" aria-label="Tutup modal">&times;</button>
+      </header>
       <div class="modal-body">
         <p class="text-secondary mb-md">
           Apakah Anda yakin ingin keluar dari aplikasi?
         </p>
       </div>
-      <div class="modal-footer">
+      <footer class="modal-footer">
         <button class="btn btn-secondary modal-close">Batal</button>
         <button class="btn btn-danger" data-action="confirm-logout">Ya, Keluar</button>
-      </div>
+      </footer>
     </div>
   </div>
 
   <!-- Load Scripts -->
-  
-  
-  
-  
+  <script type="module" src="js/utils.js"></script>
   <script type="module" src="js/pages.js"></script>
+  <script type="module" src="js/dashboard-enhanced.js"></script>
 </body>
 </html>

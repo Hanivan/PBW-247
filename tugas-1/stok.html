@@ -6,12 +6,14 @@
   <title>Stok Bahan Ajar - SITTA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/japanese-aesthetic.css">
+  <link rel="stylesheet" href="css/stok-enhanced.css">
 </head>
 <body>
   <div class="app-container">
@@ -48,25 +50,88 @@
       <header class="header">
         <button class="sidebar-toggle" aria-label="Toggle sidebar">≡</button>
         <div class="header-content">
-          <h1 class="page-title">Stok Bahan Ajar</h1>
+          <h1 class="page-title">
+            <span class="stok-page-title">Stok Bahan Ajar</span>
+            <span class="stok-page-title-sub">在庫管理システム</span>
+          </h1>
         </div>
       </header>
 
       <div class="content">
-        <div class="stock-header">
-          <div class="stock-search">
-            <input type="text" id="stockSearch" class="form-input" placeholder="Cari bahan ajar...">
+        <!-- Hero Section with Japanese Pattern -->
+        <div class="stok-hero washi-texture">
+          <!-- Vertical Text Element -->
+          <div class="stok-hero-vertical-deco">
+            <div class="vertical-text stok-vertical-label">
+              <span class="stok-char-1">在</span>
+              <span class="stok-char-2">庫</span>
+            </div>
           </div>
-          <div class="header-actions">
-            <button class="btn btn-secondary" id="viewToggle" data-view="table" title="Ganti tampilan">
-              <span id="viewIcon">▦</span>
-            </button>
-            <button class="btn btn-primary" data-action="add-stock">+ Tambah Stok</button>
+
+          <!-- Main Content -->
+          <div class="stok-hero-main">
+            <h2 class="stok-hero-title">Manajemen Stok Bahan Ajar</h2>
+            <p class="stok-hero-subtitle">Kelola inventaris bahan ajar dengan sistem pencarian dan filter cepat</p>
+          </div>
+
+          <!-- Decorative Element -->
+          <div class="stok-hero-decoration">
+            <div class="stok-circle-pattern"></div>
           </div>
         </div>
 
-        <div class="table-container" id="tableView">
-          <table class="table">
+        <!-- Stats Summary -->
+        <section class="stok-stats-wrapper" aria-label="Statistik stok">
+          <article class="stok-stat-card">
+            <div class="stok-stat-label">Total Item</div>
+            <div class="stok-stat-value" data-unit="items" id="statTotal">0</div>
+            <div class="stok-stat-icon" aria-hidden="true">(._.)</div>
+          </article>
+          <article class="stok-stat-card">
+            <div class="stok-stat-label">Total Stok</div>
+            <div class="stok-stat-value" data-unit="unit" id="statStock">0</div>
+            <div class="stok-stat-icon" aria-hidden="true">(>_<)</div>
+          </article>
+          <article class="stok-stat-card">
+            <div class="stok-stat-label">BMP</div>
+            <div class="stok-stat-value" data-unit="items" id="statBMP">0</div>
+            <div class="stok-stat-icon" aria-hidden="true">(^_^)</div>
+          </article>
+          <article class="stok-stat-card">
+            <div class="stok-stat-label">Buku Teks</div>
+            <div class="stok-stat-value" data-unit="items" id="statBuku">0</div>
+            <div class="stok-stat-icon" aria-hidden="true">(¬_¬)</div>
+          </article>
+        </section>
+
+        <!-- Search & Actions Section -->
+        <div class="stok-search-actions-wrapper">
+          <div class="stok-header-row">
+            <div class="stok-search-section">
+              <div class="stok-search-label">
+                <span class="stok-search-label-jp">検索</span>
+                <span>Cari Bahan Ajar</span>
+              </div>
+              <div class="stok-search-input-wrapper">
+                <div class="stok-search-icon">(°_°)</div>
+                <input type="text" id="stockSearch" class="stok-search-input" placeholder="Masukkan nama atau kode barang...">
+              </div>
+            </div>
+            <div class="stok-actions-section">
+              <button class="stok-view-toggle" id="viewToggle" data-view="table" title="Ganti tampilan">
+                <span id="viewIcon">▦</span>
+              </button>
+              <button class="stok-add-btn" data-action="add-stock">
+                <span>+ Tambah</span>
+                <span class="stok-add-btn-jp">追加</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table View -->
+        <div class="stok-table-wrapper" id="tableView">
+          <table class="stok-table">
             <thead>
               <tr>
                 <th>Kode Lokasi</th>
@@ -84,41 +149,52 @@
           </table>
         </div>
 
+        <!-- Grid View -->
         <div class="stock-grid hidden" id="gridView">
           <div id="stockGridBody" class="stock-grid-container">
             <!-- Data will be rendered here -->
           </div>
         </div>
+
+        <!-- Footer -->
+        <footer class="stok-footer">
+          <div class="stok-footer-pattern" aria-hidden="true"></div>
+          <div class="stok-footer-content">
+            <span class="stok-footer-text-jp">在庫システム</span>
+            <span class="stok-footer-divider" aria-hidden="true">|</span>
+            <span class="stok-footer-text">Sistem Manajemen Stok SITTA</span>
+          </div>
+        </footer>
       </div>
     </main>
   </div>
 
   <!-- Logout Confirmation Modal -->
   <div class="modal-backdrop" id="logoutModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title">Konfirmasi Logout</h2>
-        <button class="modal-close">&times;</button>
-      </div>
+    <div class="modal" role="dialog" aria-labelledby="logoutTitle">
+      <header class="modal-header">
+        <h2 class="modal-title" id="logoutTitle">Konfirmasi Logout</h2>
+        <button class="modal-close" aria-label="Tutup modal">&times;</button>
+      </header>
       <div class="modal-body">
         <p class="text-secondary mb-md">
           Apakah Anda yakin ingin keluar dari aplikasi?
         </p>
       </div>
-      <div class="modal-footer">
+      <footer class="modal-footer">
         <button class="btn btn-secondary modal-close">Batal</button>
         <button class="btn btn-danger" data-action="confirm-logout">Ya, Keluar</button>
-      </div>
+      </footer>
     </div>
   </div>
 
   <!-- Add Stock Modal -->
   <div class="modal-backdrop" id="addStockModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title">Tambah Stok Baru</h2>
-        <button class="modal-close">&times;</button>
-      </div>
+    <div class="modal" role="dialog" aria-labelledby="addStockTitle">
+      <header class="modal-header">
+        <h2 class="modal-title" id="addStockTitle">Tambah Stok Baru</h2>
+        <button class="modal-close" aria-label="Tutup modal">&times;</button>
+      </header>
       <div class="modal-body">
         <form id="addStockForm">
           <div class="form-group">
@@ -152,7 +228,7 @@
           </div>
         </form>
       </div>
-      <div class="modal-footer">
+      <footer class="modal-footer">
         <button class="btn btn-secondary modal-close">Batal</button>
         <button class="btn btn-primary" data-action="save-stock">Simpan</button>
       </div>
@@ -200,7 +276,7 @@
           </div>
         </form>
       </div>
-      <div class="modal-footer">
+      <footer class="modal-footer">
         <button class="btn btn-secondary modal-close">Batal</button>
         <button class="btn btn-primary" data-action="update-stock">Update</button>
       </div>
@@ -220,7 +296,7 @@
         </p>
         <p class="text-secondary" id="deleteItemName"></p>
       </div>
-      <div class="modal-footer">
+      <footer class="modal-footer">
         <button class="btn btn-secondary modal-close">Batal</button>
         <button class="btn btn-danger" data-action="confirm-delete">Ya, Hapus</button>
       </div>
@@ -228,10 +304,8 @@
   </div>
 
   <!-- Load Scripts -->
-  
-  
-  
-  
+  <script type="module" src="js/utils.js"></script>
   <script type="module" src="js/pages.js"></script>
+  <script type="module" src="js/stok-enhanced.js"></script>
 </body>
 </html>
