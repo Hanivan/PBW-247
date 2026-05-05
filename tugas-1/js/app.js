@@ -265,9 +265,6 @@ export const App = {
 
     tbody.innerHTML = '';
     tbody.appendChild(fragment);
-
-    tbody.innerHTML = '';
-    tbody.appendChild(fragment);
   },
 
   // Render stock grid (portrait thumbnails)

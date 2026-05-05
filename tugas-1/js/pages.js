@@ -5,107 +5,76 @@ import { Auth } from './auth.js';
 import { UI } from './ui.js';
 import { App } from './app.js';
 
-// Global event listeners flag to prevent duplicates
 let _globalListenersInitialized = false;
-let _dashboardNavInitialized = false;
 
-// Initialize global event listeners once
+const ACTION_HANDLERS = {
+  'logout': (e) => {
+    e.preventDefault();
+    UI.showModal('logoutModal');
+  },
+  'confirm-logout': () => {
+    Auth.destroySession();
+    window.location.href = PAGE_URL.LOGIN;
+  },
+  'add-stock': () => {
+    UI.showModal('addStockModal');
+  },
+  'save-stock': () => {
+    App.addStock();
+  },
+  'update-stock': () => {
+    App.updateStock();
+  },
+  'confirm-delete': () => {
+    App.deleteStock();
+  },
+  'view-item': (e, target) => {
+    e.preventDefault();
+    window.location.href = `${PAGE_URL.STOK_DETAIL}?kode=${target.dataset.kode}`;
+  },
+  'edit-item': (e, target) => {
+    e.preventDefault();
+    e.stopPropagation();
+    App.openEditModal(target.dataset.kode);
+  },
+  'delete-item': (e, target) => {
+    e.preventDefault();
+    e.stopPropagation();
+    App.openDeleteModal(target.dataset.kode);
+  },
+  'back-to-stock': () => {
+    window.location.href = PAGE_URL.STOK;
+  },
+  'view-related-item': (e, target) => {
+    window.location.href = `${PAGE_URL.STOK_DETAIL}?kode=${target.dataset.kode}`;
+  }
+};
+
 function initGlobalListeners() {
   if (_globalListenersInitialized) return;
   _globalListenersInitialized = true;
 
-  // Handle logout modal across all pages
   document.addEventListener('click', (e) => {
-    const logoutBtn = e.target.closest('[data-action="logout"]');
-    if (logoutBtn) {
-      e.preventDefault();
-      UI.showModal('logoutModal');
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+
+    const action = target.dataset.action;
+    const handler = ACTION_HANDLERS[action];
+
+    if (handler) {
+      handler(e, target);
+      return;
+    }
+
+    // Handle navigation cards
+    const navCard = e.target.closest('.nav-card[data-href]');
+    if (navCard) {
+      const href = navCard.getAttribute('data-href');
+      if (href) {
+        window.location.href = href;
+      }
     }
   }, { passive: true });
-
-  // Confirm logout action
-  document.addEventListener('click', (e) => {
-    const confirmBtn = e.target.closest('[data-action="confirm-logout"]');
-    if (confirmBtn) {
-      Auth.destroySession();
-      window.location.href = PAGE_URL.LOGIN;
-    }
-  });
-
-  // Handle add stock button (global since it can appear on multiple pages)
-  document.addEventListener('click', (e) => {
-    const addStockBtn = e.target.closest('[data-action="add-stock"]');
-    if (addStockBtn) {
-      UI.showModal('addStockModal');
-    }
-  });
-
-  // Handle save stock button
-  document.addEventListener('click', (e) => {
-    const saveStockBtn = e.target.closest('[data-action="save-stock"]');
-    if (saveStockBtn) {
-      App.addStock();
-    }
-  });
-
-  // Handle update stock button
-  document.addEventListener('click', (e) => {
-    const updateStockBtn = e.target.closest('[data-action="update-stock"]');
-    if (updateStockBtn) {
-      App.updateStock();
-    }
-  });
-
-  // Handle confirm delete button
-  document.addEventListener('click', (e) => {
-    const confirmDeleteBtn = e.target.closest('[data-action="confirm-delete"]');
-    if (confirmDeleteBtn) {
-      App.deleteStock();
-    }
-  });
-
-  // Handle stock item actions (view, edit, delete)
-  document.addEventListener('click', (e) => {
-    const viewBtn = e.target.closest('[data-action="view-item"]');
-    if (viewBtn) {
-      e.preventDefault();
-      const kode = viewBtn.dataset.kode;
-      window.location.href = `${PAGE_URL.STOK_DETAIL}?kode=${kode}`;
-      return;
-    }
-
-    const editBtn = e.target.closest('[data-action="edit-item"]');
-    if (editBtn) {
-      e.preventDefault();
-      e.stopPropagation();
-      App.openEditModal(editBtn.dataset.kode);
-      return;
-    }
-
-    const deleteBtn = e.target.closest('[data-action="delete-item"]');
-    if (deleteBtn) {
-      e.preventDefault();
-      e.stopPropagation();
-      App.openDeleteModal(deleteBtn.dataset.kode);
-    }
-  });
-
-  // Handle back to stock navigation
-  document.addEventListener('click', (e) => {
-    const backBtn = e.target.closest('[data-action="back-to-stock"]');
-    if (backBtn) {
-      window.location.href = PAGE_URL.STOK;
-    }
-  });
-
-  // Handle view related item
-  document.addEventListener('click', (e) => {
-    const relatedItem = e.target.closest('[data-action="view-related-item"]');
-    if (relatedItem) {
-      const kode = relatedItem.dataset.kode;
-      window.location.href = `${PAGE_URL.STOK_DETAIL}?kode=${kode}`;
-    }
-  });
 }
 
 // Login Page
@@ -192,20 +161,6 @@ function initDashboardPage() {
   Auth.requireAuth();
   UI.init();
   App.initDashboard();
-
-  // Handle navigation cards using event delegation (one-time listener)
-  if (!_dashboardNavInitialized) {
-    document.addEventListener('click', (e) => {
-      const navCard = e.target.closest('.nav-card[data-href]');
-      if (navCard) {
-        const href = navCard.getAttribute('data-href');
-        if (href) {
-          window.location.href = href;
-        }
-      }
-    }, { passive: true });
-    _dashboardNavInitialized = true;
-  }
 }
 
 // Tracking Page
@@ -231,10 +186,9 @@ function initStockDetailPage() {
 }
 
 // Initialize page based on body class or path
-document.addEventListener('DOMContentLoaded', function() {
+function initPage() {
   const path = window.location.pathname;
 
-  // Initialize global listeners once for all pages except login
   if (!path.includes(PAGE_URL.LOGIN) && !path.endsWith('/login')) {
     initGlobalListeners();
   }
@@ -250,4 +204,10 @@ document.addEventListener('DOMContentLoaded', function() {
   } else if (path.includes(PAGE_URL.STOK_DETAIL) || path.endsWith('/stok-detail')) {
     initStockDetailPage();
   }
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initPage);
+} else {
+  initPage();
+}
