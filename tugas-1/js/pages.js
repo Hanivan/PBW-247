@@ -1,17 +1,27 @@
 // Page-specific initialization and event handlers
 
 import { ALERT_TYPE, ANIMATION, PAGE_URL } from './constants.js';
+import { Auth } from './auth.js';
+import { UI } from './ui.js';
+import { App } from './app.js';
 
-// Handle logout modal across all pages
-function initLogoutModal() {
-  // Show logout modal when logout button is clicked
+// Global event listeners flag to prevent duplicates
+let _globalListenersInitialized = false;
+let _dashboardNavInitialized = false;
+
+// Initialize global event listeners once
+function initGlobalListeners() {
+  if (_globalListenersInitialized) return;
+  _globalListenersInitialized = true;
+
+  // Handle logout modal across all pages
   document.addEventListener('click', (e) => {
     const logoutBtn = e.target.closest('[data-action="logout"]');
     if (logoutBtn) {
       e.preventDefault();
       UI.showModal('logoutModal');
     }
-  });
+  }, { passive: true });
 
   // Confirm logout action
   document.addEventListener('click', (e) => {
@@ -19,6 +29,81 @@ function initLogoutModal() {
     if (confirmBtn) {
       Auth.destroySession();
       window.location.href = PAGE_URL.LOGIN;
+    }
+  });
+
+  // Handle add stock button (global since it can appear on multiple pages)
+  document.addEventListener('click', (e) => {
+    const addStockBtn = e.target.closest('[data-action="add-stock"]');
+    if (addStockBtn) {
+      UI.showModal('addStockModal');
+    }
+  });
+
+  // Handle save stock button
+  document.addEventListener('click', (e) => {
+    const saveStockBtn = e.target.closest('[data-action="save-stock"]');
+    if (saveStockBtn) {
+      App.addStock();
+    }
+  });
+
+  // Handle update stock button
+  document.addEventListener('click', (e) => {
+    const updateStockBtn = e.target.closest('[data-action="update-stock"]');
+    if (updateStockBtn) {
+      App.updateStock();
+    }
+  });
+
+  // Handle confirm delete button
+  document.addEventListener('click', (e) => {
+    const confirmDeleteBtn = e.target.closest('[data-action="confirm-delete"]');
+    if (confirmDeleteBtn) {
+      App.deleteStock();
+    }
+  });
+
+  // Handle stock item actions (view, edit, delete)
+  document.addEventListener('click', (e) => {
+    const viewBtn = e.target.closest('[data-action="view-item"]');
+    if (viewBtn) {
+      e.preventDefault();
+      const kode = viewBtn.dataset.kode;
+      window.location.href = `${PAGE_URL.STOK_DETAIL}?kode=${kode}`;
+      return;
+    }
+
+    const editBtn = e.target.closest('[data-action="edit-item"]');
+    if (editBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      App.openEditModal(editBtn.dataset.kode);
+      return;
+    }
+
+    const deleteBtn = e.target.closest('[data-action="delete-item"]');
+    if (deleteBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      App.openDeleteModal(deleteBtn.dataset.kode);
+    }
+  });
+
+  // Handle back to stock navigation
+  document.addEventListener('click', (e) => {
+    const backBtn = e.target.closest('[data-action="back-to-stock"]');
+    if (backBtn) {
+      window.location.href = PAGE_URL.STOK;
+    }
+  });
+
+  // Handle view related item
+  document.addEventListener('click', (e) => {
+    const relatedItem = e.target.closest('[data-action="view-related-item"]');
+    if (relatedItem) {
+      const kode = relatedItem.dataset.kode;
+      window.location.href = `${PAGE_URL.STOK_DETAIL}?kode=${kode}`;
     }
   });
 }
@@ -65,51 +150,41 @@ function initLoginPage() {
     });
   }
 
-  // Handle forgot password links
-  const forgotLinks = document.querySelectorAll('[data-modal="forgotModal"]');
-  forgotLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
+  // Use event delegation for modal links (more efficient)
+  document.addEventListener('click', (e) => {
+    const modalLink = e.target.closest('[data-modal]');
+    if (modalLink) {
       e.preventDefault();
-      UI.showModal('forgotModal');
-    });
+      const modalId = modalLink.getAttribute('data-modal');
+      UI.showModal(modalId);
+    }
   });
 
-  // Handle register links
-  const registerLinks = document.querySelectorAll('[data-modal="registerModal"]');
-  registerLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      UI.showModal('registerModal');
-    });
-  });
+  // Handle modal action buttons using event delegation
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action="forgot-password"], [data-action="register"]');
+    if (!btn) return;
 
-  // Handle forgot password form
-  const forgotBtn = document.querySelector('[data-action="forgot-password"]');
-  if (forgotBtn) {
-    forgotBtn.addEventListener('click', function() {
-      const email = document.getElementById('forgotEmail').value.trim();
+    const action = btn.getAttribute('data-action');
+
+    if (action === 'forgot-password') {
+      const email = document.getElementById('forgotEmail')?.value.trim();
       if (!email) {
         UI.showAlert('(o_o)! Masukkan email Anda', ALERT_TYPE.WARNING);
         return;
       }
       UI.showAlert('(^_^) Link reset password telah dikirim ke ' + email, ALERT_TYPE.SUCCESS);
       UI.hideModal('forgotModal');
-    });
-  }
-
-  // Handle register form
-  const registerBtn = document.querySelector('[data-action="register"]');
-  if (registerBtn) {
-    registerBtn.addEventListener('click', function() {
+    } else if (action === 'register') {
       const form = document.getElementById('registerForm');
-      if (!UI.validateForm(form)) {
+      if (form && !UI.validateForm(form)) {
         return;
       }
       UI.showAlert('(^^) Pendaftaran berhasil! Silakan login', ALERT_TYPE.SUCCESS);
       UI.hideModal('registerModal');
-      form.reset();
-    });
-  }
+      if (form) form.reset();
+    }
+  });
 }
 
 // Dashboard Page
@@ -118,16 +193,19 @@ function initDashboardPage() {
   UI.init();
   App.initDashboard();
 
-  // Handle navigation cards
-  document.querySelectorAll('.nav-card[data-href]').forEach(card => {
-    card.addEventListener('click', function() {
-      const href = this.getAttribute('data-href');
-      if (href) {
-        window.location.href = href;
+  // Handle navigation cards using event delegation (one-time listener)
+  if (!_dashboardNavInitialized) {
+    document.addEventListener('click', (e) => {
+      const navCard = e.target.closest('.nav-card[data-href]');
+      if (navCard) {
+        const href = navCard.getAttribute('data-href');
+        if (href) {
+          window.location.href = href;
+        }
       }
-    });
-  });
-
+    }, { passive: true });
+    _dashboardNavInitialized = true;
+  }
 }
 
 // Tracking Page
@@ -143,39 +221,6 @@ function initStockPage() {
   Auth.requireAuth();
   UI.init();
   App.initStock();
-
-  // Handle add stock button
-  const addStockBtn = document.querySelector('[data-action="add-stock"]');
-  if (addStockBtn) {
-    addStockBtn.addEventListener('click', function() {
-      UI.showModal('addStockModal');
-    });
-  }
-
-  // Handle save stock button
-  const saveStockBtn = document.querySelector('[data-action="save-stock"]');
-  if (saveStockBtn) {
-    saveStockBtn.addEventListener('click', function() {
-      App.addStock();
-    });
-  }
-
-  // Handle update stock button
-  const updateStockBtn = document.querySelector('[data-action="update-stock"]');
-  if (updateStockBtn) {
-    updateStockBtn.addEventListener('click', function() {
-      App.updateStock();
-    });
-  }
-
-  // Handle confirm delete button
-  const confirmDeleteBtn = document.querySelector('[data-action="confirm-delete"]');
-  if (confirmDeleteBtn) {
-    confirmDeleteBtn.addEventListener('click', function() {
-      App.deleteStock();
-    });
-  }
-
 }
 
 // Stock Detail Page
@@ -183,24 +228,25 @@ function initStockDetailPage() {
   Auth.requireAuth();
   UI.init();
   App.initStockDetail();
-  initLogoutModal();
 }
 
 // Initialize page based on body class or path
 document.addEventListener('DOMContentLoaded', function() {
   const path = window.location.pathname;
 
+  // Initialize global listeners once for all pages except login
+  if (!path.includes(PAGE_URL.LOGIN) && !path.endsWith('/login')) {
+    initGlobalListeners();
+  }
+
   if (path.includes(PAGE_URL.LOGIN) || path.endsWith('/login')) {
     initLoginPage();
   } else if (path.includes(PAGE_URL.DASHBOARD) || path.endsWith('/dashboard')) {
     initDashboardPage();
-    initLogoutModal();
   } else if (path.includes(PAGE_URL.TRACKING) || path.endsWith('/tracking')) {
     initTrackingPage();
-    initLogoutModal();
   } else if (path.includes(PAGE_URL.STOK) || path.endsWith('/stok')) {
     initStockPage();
-    initLogoutModal();
   } else if (path.includes(PAGE_URL.STOK_DETAIL) || path.endsWith('/stok-detail')) {
     initStockDetailPage();
   }

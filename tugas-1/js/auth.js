@@ -1,8 +1,9 @@
 // Auth module for login validation and session management
 
 import { STORAGE_KEY, PAGE_URL } from './constants.js';
+import { dataPengguna } from './data.js';
 
-const Auth = {
+export const Auth = {
   SESSION_KEY: STORAGE_KEY.SESSION,
 
   // Validate login credentials against dataPengguna

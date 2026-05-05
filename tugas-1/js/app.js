@@ -1,8 +1,11 @@
 // App module for page-specific functionality
 
 import { VIEW_MODE, ALERT_TYPE, ANIMATION, PAGE_URL, USER_ROLE, PROGRESS_MAX_JOURNEY_STEPS, STORAGE_KEY, IMG_DEFAULT_BOOK, RELATED_ITEMS_LIMIT } from './constants.js';
+import { dataPengguna, dataBahanAjar, dataTracking } from './data.js';
+import { Auth } from './auth.js';
+import { UI } from './ui.js';
 
-const App = {
+export const App = {
   // Get greeting based on time of day
   getGreeting() {
     const hour = new Date().getHours();
@@ -235,8 +238,14 @@ const App = {
       return;
     }
 
-    tbody.innerHTML = data.map((item, index) => `
-      <tr class="slide-up" style="animation-delay: ${index * ANIMATION.DELAY.STAGGER_TABLE}ms">
+    // Use DocumentFragment for better performance
+    const fragment = document.createDocumentFragment();
+
+    data.forEach((item) => {
+      const tr = document.createElement('tr');
+      tr.className = 'slide-up';
+
+      tr.innerHTML = `
         <td>${item.kodeLokasi}</td>
         <td>${item.kodeBarang}</td>
         <td>${item.namaBarang}</td>
@@ -245,13 +254,20 @@ const App = {
         <td>${item.stok}</td>
         <td>
           <div class="action-buttons">
-            <button class="btn btn-sm btn-ghost" onclick="window.location.href='${PAGE_URL.STOK_DETAIL}?kode=${item.kodeBarang}'">Lihat</button>
-            <button class="btn btn-sm btn-outline" onclick="App.openEditModal('${item.kodeBarang}')">Edit</button>
-            <button class="btn btn-sm btn-danger" onclick="App.openDeleteModal('${item.kodeBarang}')">Hapus</button>
+            <button class="btn btn-sm btn-ghost" data-action="view-item" data-kode="${item.kodeBarang}">Lihat</button>
+            <button class="btn btn-sm btn-outline" data-action="edit-item" data-kode="${item.kodeBarang}">Edit</button>
+            <button class="btn btn-sm btn-danger" data-action="delete-item" data-kode="${item.kodeBarang}">Hapus</button>
           </div>
         </td>
-      </tr>
-    `).join('');
+      `;
+      fragment.appendChild(tr);
+    });
+
+    tbody.innerHTML = '';
+    tbody.appendChild(fragment);
+
+    tbody.innerHTML = '';
+    tbody.appendChild(fragment);
   },
 
   // Render stock grid (portrait thumbnails)
@@ -269,23 +285,34 @@ const App = {
       return;
     }
 
-    gridBody.innerHTML = data.map((item, index) => `
-      <div class="stock-card slide-up" style="animation-delay: ${index * ANIMATION.DELAY.STAGGER_GRID}ms">
-        <div class="stock-card-cover" onclick="window.location.href='${PAGE_URL.STOK_DETAIL}?kode=${item.kodeBarang}'" style="cursor: pointer;">
+    // Use DocumentFragment for better performance
+    const fragment = document.createDocumentFragment();
+
+    data.forEach((item) => {
+      const card = document.createElement('div');
+      card.className = 'stock-card slide-up';
+      card.dataset.kode = item.kodeBarang;
+
+      card.innerHTML = `
+        <div class="stock-card-cover" data-action="view-item" data-kode="${item.kodeBarang}" style="cursor: pointer;">
           <img src="${item.cover}" alt="${item.namaBarang}" onerror="this.src='${IMG_DEFAULT_BOOK}'">
           <span class="stock-card-badge">${item.stok}</span>
         </div>
         <div class="stock-card-content">
-          <h3 class="stock-card-title" onclick="window.location.href='${PAGE_URL.STOK_DETAIL}?kode=${item.kodeBarang}'" style="cursor: pointer;">${item.namaBarang}</h3>
+          <h3 class="stock-card-title" data-action="view-item" data-kode="${item.kodeBarang}" style="cursor: pointer;">${item.namaBarang}</h3>
           <span class="stock-card-code">${item.kodeBarang}</span>
           <div class="stock-card-actions">
-            <button class="btn btn-sm btn-ghost" onclick="window.location.href='${PAGE_URL.STOK_DETAIL}?kode=${item.kodeBarang}'">Lihat</button>
-            <button class="btn btn-sm btn-outline" onclick="App.openEditModal('${item.kodeBarang}')">Edit</button>
-            <button class="btn btn-sm btn-danger" onclick="App.openDeleteModal('${item.kodeBarang}')">Hapus</button>
+            <button class="btn btn-sm btn-ghost" data-action="view-item" data-kode="${item.kodeBarang}">Lihat</button>
+            <button class="btn btn-sm btn-outline" data-action="edit-item" data-kode="${item.kodeBarang}">Edit</button>
+            <button class="btn btn-sm btn-danger" data-action="delete-item" data-kode="${item.kodeBarang}">Hapus</button>
           </div>
         </div>
-      </div>
-    `).join('');
+      `;
+      fragment.appendChild(card);
+    });
+
+    gridBody.innerHTML = '';
+    gridBody.appendChild(fragment);
   },
 
   // Filter stock by search query
@@ -505,7 +532,7 @@ const App = {
             </div>
 
             <div class="stock-detail-actions">
-              <button class="btn btn-primary" onclick="window.location.href='${PAGE_URL.STOK}'">Kembali ke Daftar</button>
+              <button class="btn btn-primary" data-action="back-to-stock">Kembali ke Daftar</button>
             </div>
           </div>
         </div>
@@ -524,7 +551,7 @@ const App = {
             <h3>Bahan Ajar Lainnya (${item.jenisBarang})</h3>
             <div class="stock-grid-container">
               ${relatedItems.map(related => `
-                <div class="stock-card" onclick="window.location.href='${PAGE_URL.STOK_DETAIL}?kode=${related.kodeBarang}'" style="cursor: pointer;">
+                <div class="stock-card" data-action="view-related-item" data-kode="${related.kodeBarang}" style="cursor: pointer;">
                   <div class="stock-card-cover">
                     <img src="${related.cover}" alt="${related.namaBarang}" onerror="this.src='${IMG_DEFAULT_BOOK}'">
                     <span class="stock-card-badge">${related.stok}</span>
@@ -542,3 +569,6 @@ const App = {
     `;
   }
 };
+
+// Make App available globally for onclick handlers
+window.App = App;

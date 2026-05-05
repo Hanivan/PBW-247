@@ -1,4 +1,4 @@
-var dataPengguna = [
+export const dataPengguna = [
   {
     id: 1,
     nama: "Rina Wulandari",
@@ -41,7 +41,7 @@ var dataPengguna = [
   }
 ];
 
-var dataBahanAjar = [
+export const dataBahanAjar = [
   {
     kodeLokasi: "0TMP01",
     kodeBarang: "ASIP4301",
@@ -89,7 +89,7 @@ var dataBahanAjar = [
   }
 ];
 
-var dataTracking = {
+export const dataTracking = {
   "2023001234": {
     nomorDO: "2023001234",
     nama: "Rina Wulandari",

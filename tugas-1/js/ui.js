@@ -2,16 +2,24 @@
 
 import { THEME, ALERT_TYPE, ANIMATION, STORAGE_KEY } from './constants.js';
 
-const UI = {
+export const UI = {
   THEME_KEY: STORAGE_KEY.THEME,
+  _initialized: {},
 
   // Initialize UI components
   init() {
-    this.initTheme();
-    this.initModals();
+    this._initOnce('theme', () => this.initTheme());
+    this._initOnce('modals', () => this.initModals());
     this.initAlerts();
-    this.initSidebar();
-    this.initActions();
+    this._initOnce('sidebar', () => this.initSidebar());
+    this._initOnce('actions', () => this.initActions());
+  },
+
+  _initOnce(key, fn) {
+    if (!this._initialized[key]) {
+      fn();
+      this._initialized[key] = true;
+    }
   },
 
   // Initialize action buttons
@@ -23,7 +31,7 @@ const UI = {
         e.preventDefault();
         this.toggleTheme();
       }
-    });
+    }, { passive: true });
   },
 
   // Theme / Dark Mode
@@ -51,7 +59,7 @@ const UI = {
 
   // Modals
   initModals() {
-    // Close modal on backdrop click
+    // Close modal on backdrop click - use passive listener for better performance
     document.addEventListener('click', (e) => {
       if (e.target.classList.contains('modal-backdrop')) {
         const modal = e.target.querySelector('.modal');
@@ -59,7 +67,7 @@ const UI = {
           this.hideModal(modal);
         }
       }
-    });
+    }, { passive: true });
 
     // Close modal on escape key
     document.addEventListener('keydown', (e) => {
@@ -72,7 +80,7 @@ const UI = {
           }
         }
       }
-    });
+    }, { passive: true });
 
     // Handle all modal close buttons
     document.addEventListener('click', (e) => {
@@ -83,7 +91,7 @@ const UI = {
           this.hideModal(modal);
         }
       }
-    });
+    }, { passive: true });
   },
 
   showModal(modalId) {
@@ -154,7 +162,7 @@ const UI = {
       if (toggleBtn) {
         this.toggleSidebar();
       }
-    });
+    }, { passive: true });
 
     // Close sidebar when clicking overlay
     document.addEventListener('click', (e) => {
@@ -162,7 +170,7 @@ const UI = {
       if (overlay) {
         this.closeSidebar();
       }
-    });
+    }, { passive: true });
   },
 
   toggleSidebar() {
