@@ -446,8 +446,16 @@ export const App = {
       cover: dataBahanAjar[index].cover
     };
 
-    // Re-render
-    this.renderStock(dataBahanAjar);
+    // Re-render based on current page
+    if (window.location.pathname.includes(PAGE_URL.STOK_DETAIL)) {
+      const updatedItem = dataBahanAjar[index];
+      this.renderStockDetail(updatedItem);
+      if (updatedItem.kodeBarang !== originalKode) {
+        history.replaceState(null, '', `${PAGE_URL.STOK_DETAIL}?kode=${updatedItem.kodeBarang}`);
+      }
+    } else {
+      this.renderStock(dataBahanAjar);
+    }
 
     // Close modal and show alert
     UI.hideModal('editStockModal');

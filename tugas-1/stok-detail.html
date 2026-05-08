@@ -65,6 +65,54 @@
     </main>
   </div>
 
+  <!-- Edit Stock Modal -->
+  <div class="modal-backdrop" id="editStockModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Edit Stok</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="editStockForm">
+          <input type="hidden" id="editKodeBarangOriginal">
+          <div class="form-group">
+            <label class="form-label" for="editKodeLokasi">Kode Lokasi</label>
+            <input type="text" id="editKodeLokasi" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editKodeBarang">Kode Barang</label>
+            <input type="text" id="editKodeBarang" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editNamaBarang">Nama Barang</label>
+            <input type="text" id="editNamaBarang" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editJenisBarang">Jenis Barang</label>
+            <select id="editJenisBarang" class="form-input" required>
+              <option value="BMP">BMP (Bahan Modul Pemanduan)</option>
+              <option value="Buku Teks">Buku Teks</option>
+              <option value="CD">CD/DVD</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editEdisi">Edisi</label>
+            <input type="text" id="editEdisi" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editStok">Jumlah Stok</label>
+            <input type="number" id="editStok" class="form-input" min="0" required>
+          </div>
+        </form>
+      </div>
+      <footer class="modal-footer">
+        <button class="btn btn-secondary modal-close">Batal</button>
+        <button class="btn btn-primary" data-action="update-stock">Update</button>
+      </footer>
+    </div>
+  </div>
+
   <!-- Logout Confirmation Modal -->
   <div class="modal-backdrop" id="logoutModal">
     <div class="modal" role="dialog" aria-labelledby="logoutTitle">
