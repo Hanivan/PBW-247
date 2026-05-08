@@ -739,6 +739,24 @@
   }
 }
 
+/* Disabled nav cards - unavailable features */
+.action-card-jp.disabled,
+.nav-card-secondary.disabled,
+.nav-card-tertiary.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  filter: grayscale(0.4);
+  user-select: none;
+}
+
+.action-card-jp.disabled:hover,
+.nav-card-secondary.disabled:hover,
+.nav-card-tertiary.disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border-subtle);
+}
+
 @media (max-width: 768px) {
   .dashboard-hero {
     grid-template-columns: 1fr;

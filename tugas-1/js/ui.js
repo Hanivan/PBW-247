@@ -229,6 +229,13 @@ export const UI = {
         }
       }
 
+      // Number validation
+      if (input.type === 'number' && isNaN(input.value)) {
+        this.showInputError(input, 'Nilai harus berupa angka');
+        errors.push(input);
+        return;
+      }
+
       // Password validation
       if (input.type === 'password' && value.length < 6) {
         this.showInputError(input, 'Password minimal 6 karakter');

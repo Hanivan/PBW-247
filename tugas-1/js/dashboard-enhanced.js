@@ -13,23 +13,20 @@ const JP_DAYS = [
   '日', '月', '火', '水', '木', '金', '土'
 ];
 
-// Time thresholds (extracted magic numbers)
-const TIME_THRESHOLDS = {
-  MORNING_END: 12,
-  AFTERNOON_END: 18
-};
-
-// Japanese greetings by time of day
+// Greetings by time of day (4 periods)
+// 01:00-10:30 pagi | 10:31-15:00 siang | 15:01-18:00 sore | 18:00-00:59 malam
 const JP_GREETINGS = {
-  morning: 'おはようございます',
-  afternoon: 'こんにちは',
-  evening: 'こんばんは'
+  pagi: 'おはようございます',
+  siang: 'こんにちは',
+  sore: 'こんばんは',
+  malam: 'おやすみなさい'
 };
 
 const ID_GREETINGS = {
-  morning: 'Selamat Pagi',
-  afternoon: 'Selamat Siang',
-  evening: 'Selamat Sore'
+  pagi: 'Selamat Pagi',
+  siang: 'Selamat Siang',
+  sore: 'Selamat Sore',
+  malam: 'Selamat Malam'
 };
 
 // Update intervals (extracted magic numbers)
@@ -84,6 +81,20 @@ function animateDashboardStats() {
   });
 }
 
+// Determine greeting period based on current time
+// pagi: 01:00 - 10:30, siang: 10:31 - 15:00, sore: 15:01 - 18:00, malam: 18:00 - 00:59
+function getGreetingPeriod(hour, minute) {
+  if (hour === 0 || (hour >= 1 && hour < 10) || (hour === 10 && minute <= 30)) {
+    return 'pagi';
+  }
+  if (hour === 10 && minute > 30 || (hour >= 11 && hour < 15) || (hour === 15 && minute === 0)) {
+    return 'siang';
+  }
+  if (hour === 15 && minute > 0 || (hour >= 16 && hour < 18) || (hour === 18 && minute === 0)) {
+    return 'sore';
+  }
+  return 'malam';
+}
 
 // Update vertical Japanese date display
 function updateJapaneseDate() {
@@ -115,16 +126,8 @@ function updateJapaneseDate() {
 
 // Update greetings in Japanese and Indonesian
 function updateGreetings() {
-  const hour = new Date().getHours();
-  let greetingKey;
-
-  if (hour < TIME_THRESHOLDS.MORNING_END) {
-    greetingKey = 'morning';
-  } else if (hour < TIME_THRESHOLDS.AFTERNOON_END) {
-    greetingKey = 'afternoon';
-  } else {
-    greetingKey = 'evening';
-  }
+  const now = new Date();
+  const greetingKey = getGreetingPeriod(now.getHours(), now.getMinutes());
 
   // Update hero greeting
   const heroGreetingJPEl = document.getElementById('heroGreetingJP');
@@ -172,6 +175,9 @@ if (document.readyState === 'loading') {
 } else {
   initDashboardEnhanced();
 }
+
+// Clean up intervals on page unload
+window.addEventListener('beforeunload', stopClock);
 
 // Export for potential module use
 export { initDashboardEnhanced, updateJapaneseDate, updateGreetings, stopClock, animateDashboardStats };
