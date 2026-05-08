@@ -333,9 +333,15 @@
    DELAY VARIANTS
    ======================================== */
 
+.delay-0 { animation-delay: 0ms; }
+.delay-50 { animation-delay: 50ms; }
+.delay-75 { animation-delay: 75ms; }
 .delay-100 { animation-delay: 100ms; }
+.delay-150 { animation-delay: 150ms; }
 .delay-200 { animation-delay: 200ms; }
+.delay-225 { animation-delay: 225ms; }
 .delay-300 { animation-delay: 300ms; }
+.delay-375 { animation-delay: 375ms; }
 .delay-400 { animation-delay: 400ms; }
 .delay-500 { animation-delay: 500ms; }
 .delay-600 { animation-delay: 600ms; }

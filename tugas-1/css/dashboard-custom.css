@@ -333,6 +333,10 @@
   font-size: var(--text-2xl);
 }
 
+.stat-icon-success { background: var(--success-subtle); color: var(--success); }
+.stat-icon-warning { background: var(--warning-subtle); color: var(--warning); }
+.stat-icon-info { background: var(--info-subtle); color: var(--info); }
+
 .stat-content-compact {
   flex: 1;
 }
