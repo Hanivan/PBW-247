@@ -1,0 +1,836 @@
+/* ========================================
+   JAPANESE CREATIVE AESTHETIC - Dashboard
+   SITTA - Bold Asymmetric Layout with Traditional Elements
+   ======================================== */
+
+/* ========================================
+   DASHBOARD HEADER - Japanese Dual-Language
+   ======================================== */
+
+.jp-title-main {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-jp);
+  color: var(--text-primary);
+  display: block;
+}
+
+.jp-title-sub {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-sm);
+  font-weight: var(--font-normal);
+  letter-spacing: var(--tracking-jp-wide);
+  color: var(--text-tertiary);
+  display: block;
+  margin-top: var(--spacing-3);
+  opacity: 0.7;
+}
+
+.jp-greeting {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ========================================
+   HERO SECTION - Dramatic Japanese Layout
+   ======================================== */
+
+.dashboard-hero {
+  position: relative;
+  background: linear-gradient(135deg, var(--jp-indigo) 0%, var(--jp-indigo-light) 50%, var(--accent-primary) 100%);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-10) var(--spacing-8);
+  margin-bottom: var(--spacing-8);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--spacing-8);
+  overflow: hidden;
+  box-shadow: var(--shadow-2xl);
+}
+
+/* Traditional Japanese pattern overlay */
+.dashboard-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='0.5'/%3E%3Ccircle cx='50' cy='50' r='20' stroke='rgba(255,255,255,0.03)' fill='none'/%3E%3Ccircle cx='50' cy='50' r='35' stroke='rgba(255,255,255,0.02)' fill='none'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Vertical Date Display */
+.hero-vertical {
+  display: flex;
+  align-items: center;
+  padding-right: var(--spacing-6);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.jp-date-display {
+  font-family: var(--font-jp-serif);
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: var(--tracking-jp-wide);
+}
+
+.jp-date-year {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-black);
+  line-height: 1;
+}
+
+.jp-date-month {
+  font-size: var(--text-lg);
+  font-weight: var(--font-medium);
+  margin-top: var(--spacing-2);
+  opacity: 0.8;
+}
+
+.jp-date-day {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  margin-top: var(--spacing-1);
+}
+
+/* Hero Content */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1;
+}
+
+.hero-greeting {
+  margin-bottom: var(--spacing-4);
+}
+
+.hero-greeting-jp {
+  display: block;
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-5xl);
+  font-weight: var(--font-black);
+  color: white;
+  letter-spacing: var(--tracking-jp-wide);
+  line-height: 1.1;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.hero-greeting-id {
+  display: block;
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: var(--spacing-2);
+  letter-spacing: var(--tracking-wide);
+}
+
+.hero-subtitle {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: var(--tracking-wide);
+  max-width: 500px;
+}
+
+/* Hero Seal */
+.hero-seal {
+  display: flex;
+  align-items: flex-start;
+  padding-top: var(--spacing-4);
+}
+
+/* ========================================
+   SECTIONS - Japanese Style Headers
+   ======================================== */
+
+.dashboard-section {
+  margin-bottom: var(--spacing-10);
+}
+
+.section-header-with-deco {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+  position: relative;
+  padding-left: var(--spacing-6);
+}
+
+/* Vertical accent line */
+.section-header-with-deco::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent-primary),
+    transparent
+  );
+  border-radius: var(--radius-full);
+}
+
+.section-label-jp {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-jp-wide);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  padding: var(--spacing-1) var(--spacing-3);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.section-title {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-jp);
+  color: var(--text-primary);
+}
+
+/* ========================================
+   STATS BENTO GRID - Japanese Layout
+   ======================================== */
+
+.stats-bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-5);
+}
+
+/* Large Primary Stat Card */
+.stat-card-large {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-8);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--duration-300) var(--ease-jp);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-card-large::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--accent-primary),
+    var(--accent-hover)
+  );
+  opacity: 0;
+  transition: opacity var(--duration-300) var(--ease-jp);
+}
+
+.stat-card-large:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--accent-primary);
+}
+
+.stat-card-large:hover::before {
+  opacity: 1;
+}
+
+.stat-card-deco {
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+  width: 80px;
+  height: 80px;
+  background: var(--accent-subtle);
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-6);
+}
+
+.stat-label-jp {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-jp-wide);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+.stat-icon-large {
+  font-size: var(--text-4xl);
+  opacity: 0.8;
+}
+
+.stat-value-jp {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-6xl);
+  font-weight: var(--font-black);
+  color: var(--accent-primary);
+  line-height: 1;
+  margin-bottom: var(--spacing-2);
+  letter-spacing: -0.02em;
+}
+
+.stat-card-large .stat-label {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* Stats Row - Compact Cards */
+.stats-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.stat-card-compact {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-5);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  transition: all var(--duration-300) var(--ease-jp);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card-compact:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-default);
+}
+
+.stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon-compact {
+  font-size: var(--text-2xl);
+}
+
+.stat-icon-success { background: var(--success-subtle); color: var(--success); }
+.stat-icon-warning { background: var(--warning-subtle); color: var(--warning); }
+.stat-icon-info { background: var(--info-subtle); color: var(--info); }
+
+.stat-content-compact {
+  flex: 1;
+}
+
+.stat-value-compact {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.stat-label-compact {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-1);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ========================================
+   QUICK ACTIONS - Horizontal Flow
+   ======================================== */
+
+.quick-actions-flow {
+  display: flex;
+  gap: var(--spacing-4);
+  overflow-x: auto;
+  padding-bottom: var(--spacing-2);
+}
+
+.action-card-jp {
+  flex: 1;
+  min-width: 280px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  text-decoration: none;
+  transition: all var(--duration-300) var(--ease-jp);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.action-card-jp::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-primary),
+    var(--accent-hover)
+  );
+  transform: scaleY(0);
+  transition: transform var(--duration-300) var(--ease-jp);
+}
+
+.action-card-jp:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-primary);
+}
+
+.action-card-jp:hover::before {
+  transform: scaleY(1);
+}
+
+.action-card-inner {
+  padding: var(--spacing-6);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.action-icon-jp {
+  width: 56px;
+  height: 56px;
+  background: var(--accent-subtle);
+  color: var(--accent-primary);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-2xl);
+  font-family: var(--font-jp-serif);
+  flex-shrink: 0;
+}
+
+.action-content-jp {
+  flex: 1;
+}
+
+.action-title-jp {
+  display: block;
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-jp);
+  margin-bottom: var(--spacing-1);
+}
+
+.action-desc-jp {
+  display: block;
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.action-arrow {
+  font-size: var(--text-xl);
+  color: var(--text-tertiary);
+  transition: all var(--duration-200) var(--ease-jp);
+}
+
+.action-card-jp:hover .action-arrow {
+  color: var(--accent-primary);
+  transform: translateX(4px);
+}
+
+/* ========================================
+   NAVIGATION GRID - Asymmetric Layout
+   ======================================== */
+
+.nav-grid-asymmetric {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: var(--spacing-5);
+}
+
+/* Featured Large Card */
+.nav-card-featured {
+  grid-row: span 2;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  text-decoration: none;
+  position: relative;
+  box-shadow: var(--shadow-md);
+  transition: all var(--duration-300) var(--ease-jp);
+  cursor: pointer;
+}
+
+.nav-card-featured-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent-subtle) 0%, transparent 50%);
+  opacity: 0.5;
+  transition: opacity var(--duration-300) var(--ease-jp);
+}
+
+.nav-card-featured:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-2xl);
+  border-color: var(--accent-primary);
+}
+
+.nav-card-featured:hover .nav-card-featured-bg {
+  opacity: 0.8;
+}
+
+.nav-card-featured-content {
+  position: relative;
+  z-index: 1;
+  padding: var(--spacing-8);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-card-featured-icon {
+  font-size: var(--text-6xl);
+  margin-bottom: var(--spacing-6);
+  opacity: 0.9;
+}
+
+.nav-card-featured-title {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-jp);
+  margin-bottom: var(--spacing-3);
+}
+
+.nav-card-featured-desc {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--spacing-6);
+}
+
+.nav-card-featured-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-card-featured-label {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-jp-wide);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+.nav-card-featured-arrow {
+  font-size: var(--text-2xl);
+  color: var(--accent-primary);
+  transition: transform var(--duration-200) var(--ease-jp);
+}
+
+.nav-card-featured:hover .nav-card-featured-arrow {
+  transform: translateX(8px);
+}
+
+/* Secondary Cards Column */
+.nav-cards-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.nav-card-secondary {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-5);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  text-decoration: none;
+  transition: all var(--duration-300) var(--ease-jp);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+.nav-card-secondary:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-primary);
+}
+
+.nav-card-secondary-left {
+  flex-shrink: 0;
+}
+
+.nav-card-secondary-icon {
+  font-size: var(--text-3xl);
+}
+
+.nav-card-secondary-right {
+  flex: 1;
+}
+
+.nav-card-secondary-title {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-jp);
+  margin-bottom: var(--spacing-1);
+}
+
+.nav-card-secondary-label {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-jp-wide);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+/* Tertiary Cards Row */
+.nav-cards-row {
+  display: flex;
+  gap: var(--spacing-4);
+}
+
+.nav-card-tertiary {
+  flex: 1;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-5);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  text-decoration: none;
+  transition: all var(--duration-300) var(--ease-jp);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+.nav-card-tertiary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-primary);
+}
+
+.nav-card-tertiary-icon {
+  font-size: var(--text-2xl);
+  flex-shrink: 0;
+}
+
+.nav-card-tertiary-content {
+  flex: 1;
+}
+
+.nav-card-tertiary-title {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-jp);
+  margin-bottom: var(--spacing-1);
+}
+
+.nav-card-tertiary-label {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-jp-wide);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+/* ========================================
+   FOOTER - Japanese Pattern
+   ======================================== */
+
+.dashboard-footer {
+  margin-top: var(--spacing-12);
+  padding-top: var(--spacing-8);
+  border-top: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+.footer-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--border-subtle),
+    var(--border-subtle) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.footer-text-jp {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  letter-spacing: var(--tracking-jp);
+}
+
+.footer-divider {
+  color: var(--border-default);
+  font-size: var(--text-sm);
+}
+
+.footer-text {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .stats-bento-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-grid-asymmetric {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .nav-card-featured {
+    grid-row: span 1;
+  }
+}
+
+/* Disabled nav cards - unavailable features */
+.action-card-jp.disabled,
+.nav-card-secondary.disabled,
+.nav-card-tertiary.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  filter: grayscale(0.4);
+  user-select: none;
+}
+
+.action-card-jp.disabled:hover,
+.nav-card-secondary.disabled:hover,
+.nav-card-tertiary.disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border-subtle);
+}
+
+@media (max-width: 768px) {
+  .dashboard-hero {
+    grid-template-columns: 1fr;
+    padding: var(--spacing-8) var(--spacing-6);
+    text-align: center;
+  }
+
+  .hero-vertical {
+    justify-content: center;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-right: 0;
+    padding-bottom: var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .jp-date-display {
+    flex-direction: row;
+    gap: var(--spacing-3);
+  }
+
+  .hero-greeting-jp {
+    font-size: var(--text-3xl);
+  }
+
+  .hero-seal {
+    display: none;
+  }
+
+  .quick-actions-flow {
+    flex-direction: column;
+  }
+
+  .action-card-jp {
+    min-width: auto;
+  }
+
+  .nav-cards-row {
+    flex-direction: column;
+  }
+
+  .section-header-with-deco {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-hero {
+    padding: var(--spacing-6);
+  }
+
+  .hero-greeting-jp {
+    font-size: var(--text-2xl);
+  }
+
+  .stat-card-large {
+    padding: var(--spacing-6);
+  }
+
+  .stat-value-jp {
+    font-size: var(--text-4xl);
+  }
+
+  .nav-card-featured-content {
+    padding: var(--spacing-6);
+  }
+
+  .nav-card-featured-icon {
+    font-size: var(--text-4xl);
+  }
+}

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Bahan Ajar - SITTA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/japanese-aesthetic.css">
+  <link rel="stylesheet" href="css/stok-detail-enhanced.css">
+  <style>[v-cloak]{display:none}</style>
+</head>
+<body>
+  <div id="detail-app" class="app-container" v-cloak>
+    <!-- Sidebar -->
+    <aside class="sidebar" :class="{ open: sidebarOpen }">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-icon">S</span>
+          <span>SITTA</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item"><span>(^^)</span><span>Dashboard</span></a>
+        <a href="tracking.html" class="nav-item"><span>(&gt;_&lt;)</span><span>Tracking Pengiriman</span></a>
+        <a href="stok.html" class="nav-item"><span>(_|_)</span><span>Stok Bahan Ajar</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-secondary btn-block" @click="toggleTheme"><span>{{ themeIcon }}</span> Dark Mode</button>
+        <button class="btn btn-danger btn-block mt-sm" @click="showLogoutModal = true">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <button class="sidebar-toggle" aria-label="Toggle sidebar" @click="toggleSidebar">≡</button>
+        <div class="header-content">
+          <h1 class="page-title">
+            <span class="stok-detail-page-title">Detail Bahan Ajar</span>
+            <span class="stok-detail-page-title-sub">教材詳細</span>
+          </h1>
+        </div>
+      </header>
+
+      <div class="content" v-if="item">
+        <!-- Hero -->
+        <div class="stok-detail-hero washi-texture">
+          <div class="stok-detail-hero-vertical">詳細</div>
+          <div class="stok-detail-hero-content">
+            <div class="stok-detail-hero-badge">
+              <span>{{ item.kategori }}</span>
+              <span>•</span>
+              <span>{{ item.upbjj }}</span>
+            </div>
+            <h2 class="stok-detail-hero-title">{{ item.judul }}</h2>
+            <p class="stok-detail-hero-subtitle">Kode: {{ item.kode }} • Lokasi Rak: {{ item.lokasiRak }}</p>
+          </div>
+        </div>
+
+        <!-- Main -->
+        <div class="stok-detail-main">
+          <div class="stok-detail-cover-section">
+            <div class="stok-detail-cover-wrapper">
+              <div class="stok-detail-cover-image">
+                <img src="img/default-book.svg" :alt="item.judul">
+                <div class="stok-detail-cover-badge">
+                  <span class="stok-detail-cover-badge-label">Stok</span>
+                  <span class="stok-detail-cover-badge-value">{{ item.qty }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stok-detail-info-section">
+            <div class="stok-detail-title-section">
+              <h1 class="stok-detail-main-title">{{ item.judul }}</h1>
+              <p class="stok-detail-subtitle">Bahan ajar untuk kode mata kuliah {{ item.kode }}</p>
+            </div>
+
+            <div class="stok-detail-meta-grid">
+              <div class="stok-detail-meta-card">
+                <div class="stok-detail-meta-label"><span class="stok-detail-meta-label-jp">場所</span><span>Lokasi Rak</span></div>
+                <div class="stok-detail-meta-value code">{{ item.lokasiRak }}</div>
+              </div>
+              <div class="stok-detail-meta-card">
+                <div class="stok-detail-meta-label"><span class="stok-detail-meta-label-jp">商品</span><span>Kode</span></div>
+                <div class="stok-detail-meta-value code">{{ item.kode }}</div>
+              </div>
+              <div class="stok-detail-meta-card">
+                <div class="stok-detail-meta-label"><span class="stok-detail-meta-label-jp">種類</span><span>Kategori</span></div>
+                <div class="stok-detail-meta-value badge">{{ item.kategori }}</div>
+              </div>
+              <div class="stok-detail-meta-card">
+                <div class="stok-detail-meta-label"><span class="stok-detail-meta-label-jp">場所</span><span>UPBJJ</span></div>
+                <div class="stok-detail-meta-value">{{ item.upbjj }}</div>
+              </div>
+              <div class="stok-detail-meta-card">
+                <div class="stok-detail-meta-label"><span class="stok-detail-meta-label-jp">価格</span><span>Harga</span></div>
+                <div class="stok-detail-meta-value">{{ hargaText }}</div>
+              </div>
+              <div class="stok-detail-meta-card">
+                <div class="stok-detail-meta-label"><span class="stok-detail-meta-label-jp">安全</span><span>Safety Stock</span></div>
+                <div class="stok-detail-meta-value">{{ item.safety }}</div>
+              </div>
+            </div>
+
+            <div class="stok-detail-stock-display">
+              <div class="stok-detail-stock-label">Stok Tersedia</div>
+              <div class="stok-detail-stock-value" data-unit="unit">{{ item.qty }}</div>
+              <div class="stok-detail-stock-status">{{ stockStatus }}</div>
+            </div>
+
+            <div class="stok-detail-actions">
+              <a href="stok.html" class="stok-detail-action-btn primary"><span>← Kembali ke Daftar</span></a>
+              <button class="stok-detail-action-btn secondary" @click="openEdit"><span>Edit Data</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="stok-detail-description-section">
+          <div class="stok-detail-description-header">
+            <span class="stok-detail-description-label-jp">説明</span>
+            <h3 class="stok-detail-description-title">Deskripsi Produk</h3>
+          </div>
+          <p class="stok-detail-description-text">
+            Bahan ajar {{ item.judul }} adalah materi pembelajaran untuk kode mata kuliah {{ item.kode }}.
+            Bahan ajar ini termasuk dalam kategori {{ item.kategori }} dengan harga {{ hargaText }}.
+            Stok saat ini tersedia sebanyak {{ item.qty }} unit di rak {{ item.lokasiRak }} (UPBJJ {{ item.upbjj }}).
+          </p>
+          <p class="stok-detail-description-text" v-if="item.catatanHTML">Catatan: <span v-html="item.catatanHTML"></span></p>
+        </div>
+
+        <!-- Related -->
+        <div class="stok-detail-related-section" v-if="related.length > 0">
+          <div class="stok-detail-related-header">
+            <span class="stok-detail-related-label-jp">関連</span>
+            <h3 class="stok-detail-related-title">Bahan Ajar Lainnya ({{ item.kategori }})</h3>
+          </div>
+          <div class="stok-detail-related-grid">
+            <div class="stock-card" style="cursor:pointer" v-for="r in related" :key="r.kode" @click="goDetail(r.kode)">
+              <div class="stock-card-cover">
+                <img src="img/default-book.svg" :alt="r.judul">
+                <span class="stock-card-badge">{{ r.qty }}</span>
+              </div>
+              <div class="stock-card-content">
+                <h3 class="stock-card-title">{{ r.judul }}</h3>
+                <span class="stock-card-code">{{ r.kode }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="stok-detail-footer">
+          <div class="stok-detail-footer-pattern"></div>
+          <div class="stok-detail-footer-content">
+            <span class="stok-detail-footer-text-jp">教材詳細システム</span>
+            <span class="stok-detail-footer-divider">|</span>
+            <span class="stok-detail-footer-text">Sistem Detail Bahan Ajar SITTA</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Sidebar overlay -->
+    <div class="sidebar-overlay" :class="{ active: sidebarOpen }" v-if="sidebarOpen" @click="closeSidebar"></div>
+
+    <!-- Edit Stock Modal -->
+    <div class="modal-backdrop" :class="{ active: showEdit }">
+      <div class="modal" role="dialog">
+        <header class="modal-header">
+          <h2 class="modal-title">Edit Stok</h2>
+          <button class="modal-close" @click="showEdit = false">&times;</button>
+        </header>
+        <div class="modal-body">
+          <form @submit.prevent="saveEdit">
+            <div class="form-group">
+              <label class="form-label">Kode</label>
+              <input type="text" class="form-input" :class="{ error: editErrors.kode }" v-model.trim="editForm.kode">
+              <span class="form-error" v-if="editErrors.kode">{{ editErrors.kode }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Judul</label>
+              <input type="text" class="form-input" :class="{ error: editErrors.judul }" v-model.trim="editForm.judul">
+              <span class="form-error" v-if="editErrors.judul">{{ editErrors.judul }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kategori</label>
+              <select class="form-input" v-model="editForm.kategori">
+                <option v-for="k in kategoriList" :key="k" :value="k">{{ k }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">UPBJJ</label>
+              <select class="form-input" :class="{ error: editErrors.upbjj }" v-model="editForm.upbjj">
+                <option v-for="u in upbjjList" :key="u" :value="u">{{ u }}</option>
+              </select>
+              <span class="form-error" v-if="editErrors.upbjj">{{ editErrors.upbjj }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Lokasi Rak</label>
+              <input type="text" class="form-input" :class="{ error: editErrors.lokasiRak }" v-model.trim="editForm.lokasiRak">
+              <span class="form-error" v-if="editErrors.lokasiRak">{{ editErrors.lokasiRak }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Harga</label>
+              <input type="number" min="0" class="form-input" :class="{ error: editErrors.harga }" v-model.number="editForm.harga">
+              <span class="form-error" v-if="editErrors.harga">{{ editErrors.harga }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Jumlah Stok</label>
+              <input type="number" min="0" class="form-input" :class="{ error: editErrors.qty }" v-model.number="editForm.qty">
+              <span class="form-error" v-if="editErrors.qty">{{ editErrors.qty }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Safety Stock</label>
+              <input type="number" min="0" class="form-input" :class="{ error: editErrors.safety }" v-model.number="editForm.safety">
+              <span class="form-error" v-if="editErrors.safety">{{ editErrors.safety }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Catatan</label>
+              <input type="text" class="form-input" v-model.trim="editForm.catatanHTML">
+            </div>
+          </form>
+        </div>
+        <footer class="modal-footer">
+          <button class="btn btn-secondary" @click="showEdit = false">Batal</button>
+          <button class="btn btn-primary" @click="saveEdit">Update</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="modal-backdrop" :class="{ active: showLogoutModal }">
+      <div class="modal" role="dialog">
+        <header class="modal-header">
+          <h2 class="modal-title">Konfirmasi Logout</h2>
+          <button class="modal-close" @click="showLogoutModal = false">&times;</button>
+        </header>
+        <div class="modal-body"><p class="text-secondary mb-md">Apakah Anda yakin ingin keluar dari aplikasi?</p></div>
+        <footer class="modal-footer">
+          <button class="btn btn-secondary" @click="showLogoutModal = false">Batal</button>
+          <button class="btn btn-danger" @click="confirmLogout">Ya, Keluar</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="alert-container">
+      <div v-for="a in alerts" :key="a.id" class="alert" :class="a.type">
+        <span class="alert-message">{{ a.message }}</span>
+        <button class="alert-close" @click="removeAlert(a.id)">&times;</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/vendor/vue.min.js"></script>
+  <script src="js/dataBahanAjar.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/stok-detail-app.js"></script>
+</body>
+</html>

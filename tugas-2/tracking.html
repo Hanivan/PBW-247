@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tracking Pengiriman - SITTA | 配送追跡</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/japanese-aesthetic.css">
+  <link rel="stylesheet" href="css/tracking.css">
+  <link rel="stylesheet" href="css/tracking-enhanced.css">
+  <style>[v-cloak]{display:none}</style>
+</head>
+<body>
+  <div id="tracking-app" class="app-container" v-cloak>
+    <!-- Sidebar -->
+    <aside class="sidebar" :class="{ open: sidebarOpen }">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-icon">S</span>
+          <span>SITTA</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item"><span>(^^)</span><span>Dashboard</span></a>
+        <a href="tracking.html" class="nav-item active"><span>(&gt;_&lt;)</span><span>Tracking Pengiriman</span></a>
+        <a href="stok.html" class="nav-item"><span>(_|_)</span><span>Stok Bahan Ajar</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-secondary btn-block" @click="toggleTheme"><span>{{ themeIcon }}</span> Dark Mode</button>
+        <button class="btn btn-danger btn-block mt-sm" @click="showLogoutModal = true">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <button class="sidebar-toggle" aria-label="Toggle sidebar" @click="toggleSidebar">≡</button>
+        <div class="header-content">
+          <h1 class="page-title">
+            <span class="jp-title-main">Tracking Pengiriman</span>
+            <span class="jp-title-sub">配送追跡システム</span>
+          </h1>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- Hero -->
+        <div class="tracking-hero washi-texture">
+          <div class="hero-vertical-deco">
+            <div class="vertical-text jp-vertical-label">
+              <span class="jp-char-1">追</span>
+              <span class="jp-char-2">跡</span>
+            </div>
+          </div>
+          <div class="hero-main">
+            <h2 class="hero-title">Lacak Pengiriman Anda</h2>
+            <p class="hero-subtitle">Masukkan Nomor Delivery Order untuk melihat status pengiriman bahan ajar</p>
+          </div>
+          <div class="hero-decoration">
+            <div class="jp-circle-pattern"></div>
+          </div>
+        </div>
+
+        <!-- Search -->
+        <div class="tracking-search-section">
+          <div class="search-container">
+            <div class="search-header">
+              <span class="search-label-jp">検索</span>
+              <h3 class="search-title">Cari Pengiriman</h3>
+            </div>
+
+            <form class="tracking-search-form" @submit.prevent="search">
+              <div class="search-input-group">
+                <div class="search-icon-wrapper"><span class="search-icon">(O_O)</span></div>
+                <input type="text" class="tracking-search-input" v-model.trim="doNumber"
+                       placeholder="Masukkan nomor DO..." autocomplete="off">
+                <button type="submit" class="tracking-search-btn">
+                  <span class="search-btn-text">検索</span>
+                  <span class="search-btn-icon">(°_°)</span>
+                </button>
+              </div>
+            </form>
+
+            <div class="search-examples">
+              <span class="examples-label">Contoh:</span>
+              <div class="example-dos">
+                <code class="example-do" @click="fillExample('DO2025-0001')">DO2025-0001</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div id="trackingResults">
+          <div class="tracking-results-wrapper slide-up" v-if="result">
+            <div class="tracking-result-header">
+              <div><span class="tracking-result-badge">{{ result.status }}</span></div>
+              <span class="tracking-result-title">検索結果</span>
+            </div>
+
+            <div class="tracking-info-grid">
+              <div class="tracking-info-item">
+                <div class="tracking-info-label">名前 / Nama</div>
+                <div class="tracking-info-value">{{ result.nama }}</div>
+              </div>
+              <div class="tracking-info-item">
+                <div class="tracking-info-label">配送番号 / Nomor DO</div>
+                <div class="tracking-info-value small">{{ lastQuery }}</div>
+              </div>
+              <div class="tracking-info-item">
+                <div class="tracking-info-label">学籍番号 / NIM</div>
+                <div class="tracking-info-value small">{{ result.nim }}</div>
+              </div>
+            </div>
+
+            <div class="tracking-info-grid" style="margin-bottom: var(--spacing-6);">
+              <div class="tracking-info-item">
+                <div class="tracking-info-label">配送業者 / Ekspedisi</div>
+                <div class="tracking-info-value small">{{ result.ekspedisi }}</div>
+              </div>
+              <div class="tracking-info-item">
+                <div class="tracking-info-label">発送日 / Tanggal Kirim</div>
+                <div class="tracking-info-value small">{{ result.tanggalKirim }}</div>
+              </div>
+              <div class="tracking-info-item">
+                <div class="tracking-info-label">パケット種類 / Jenis Paket</div>
+                <div class="tracking-info-value small">{{ paketNama(result.paket) }}</div>
+              </div>
+              <div class="tracking-info-item">
+                <div class="tracking-info-label">合計金額 / Total</div>
+                <div class="tracking-info-value small">{{ formatRupiah(result.total) }}</div>
+              </div>
+            </div>
+
+            <div class="tracking-progress-section">
+              <div class="tracking-progress-header">
+                <span class="tracking-progress-title">進捗状況 / Progress</span>
+                <span class="tracking-progress-percentage">{{ progress }}</span>
+              </div>
+              <div class="tracking-progress-bar">
+                <div class="tracking-progress-fill" :style="{ width: progress + '%' }"></div>
+              </div>
+            </div>
+
+            <div class="tracking-timeline-wrapper">
+              <div class="tracking-timeline-item" v-for="(p, i) in result.perjalanan" :key="i"
+                   :class="{ completed: i < result.perjalanan.length - 1 }">
+                <div class="tracking-timeline-dot"></div>
+                <div class="tracking-timeline-time">{{ p.waktu }}</div>
+                <div class="tracking-timeline-content">{{ p.keterangan }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tracking-results-wrapper slide-up" v-else-if="searched">
+            <div class="tracking-empty-state">
+              <div class="tracking-empty-icon">(&gt;_&lt;)</div>
+              <p class="tracking-empty-text">データが見つかりません — Data tracking tidak ditemukan untuk Nomor DO: {{ lastQuery }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reference -->
+        <section class="tracking-reference" aria-labelledby="guideTitle">
+          <header class="reference-header">
+            <span class="reference-label-jp">ガイド</span>
+            <h3 class="reference-title" id="guideTitle">Panduan Tracking</h3>
+          </header>
+          <div class="reference-grid" role="list">
+            <article class="reference-card" role="listitem">
+              <div class="reference-icon" aria-hidden="true">(&gt;_&lt;)</div>
+              <h4 class="reference-title-card">Pesanan Diproses</h4>
+              <p class="reference-desc">Bahan ajar sedang disiapkan</p>
+            </article>
+            <article class="reference-card" role="listitem">
+              <div class="reference-icon" aria-hidden="true">(｡•̀ᴗ-)✧</div>
+              <h4 class="reference-title-card">Dalam Pengiriman</h4>
+              <p class="reference-desc">Paket sedang dalam perjalanan</p>
+            </article>
+            <article class="reference-card" role="listitem">
+              <div class="reference-icon" aria-hidden="true">(・_・)</div>
+              <h4 class="reference-title-card">Tiba di Tujuan</h4>
+              <p class="reference-desc">Paket telah sampai lokasi</p>
+            </article>
+            <article class="reference-card" role="listitem">
+              <div class="reference-icon" aria-hidden="true">(^_^)</div>
+              <h4 class="reference-title-card">Selesai</h4>
+              <p class="reference-desc">Paket telah diterima</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="tracking-footer">
+          <div class="footer-pattern-jp" aria-hidden="true"></div>
+          <div class="footer-content-jp">
+            <span class="footer-text-jp">配送システム</span>
+            <span class="footer-divider">|</span>
+            <span class="footer-text">Sistem Tracking Pengiriman SITTA</span>
+          </div>
+        </footer>
+      </div>
+    </main>
+
+    <!-- Sidebar overlay -->
+    <div class="sidebar-overlay" :class="{ active: sidebarOpen }" v-if="sidebarOpen" @click="closeSidebar"></div>
+
+    <!-- Logout Modal -->
+    <div class="modal-backdrop" :class="{ active: showLogoutModal }">
+      <div class="modal" role="dialog">
+        <header class="modal-header">
+          <h2 class="modal-title">Konfirmasi Logout</h2>
+          <button class="modal-close" @click="showLogoutModal = false">&times;</button>
+        </header>
+        <div class="modal-body"><p class="text-secondary mb-md">Apakah Anda yakin ingin keluar dari aplikasi?</p></div>
+        <footer class="modal-footer">
+          <button class="btn btn-secondary" @click="showLogoutModal = false">Batal</button>
+          <button class="btn btn-danger" @click="confirmLogout">Ya, Keluar</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="alert-container">
+      <div v-for="a in alerts" :key="a.id" class="alert" :class="a.type">
+        <span class="alert-message">{{ a.message }}</span>
+        <button class="alert-close" @click="removeAlert(a.id)">&times;</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/vendor/vue.min.js"></script>
+  <script src="js/dataBahanAjar.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/tracking-app.js"></script>
+</body>
+</html>
