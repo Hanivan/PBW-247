@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemesanan Bahan Ajar - SITTA | 注文</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/japanese-aesthetic.css">
+  <link rel="stylesheet" href="css/pemesanan.css">
+  <style>[v-cloak]{display:none}</style>
+</head>
+<body>
+  <div id="pemesanan-app" class="app-container" v-cloak @keydown.esc="handleSuccessKeydown">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" :class="{ open: sidebarOpen }">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-icon">S</span>
+          <span>SITTA</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item"><span>(^^)</span><span>Dashboard</span></a>
+        <a href="tracking.html" class="nav-item"><span>(&gt;_&lt;)</span><span>Tracking Pengiriman</span></a>
+        <a href="stok.html" class="nav-item"><span>(_|_)</span><span>Stok Bahan Ajar</span></a>
+        <a href="pemesanan.html" class="nav-item active"><span>(+_+)</span><span>Pemesanan</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-secondary btn-block" @click="toggleTheme">
+          <span>{{ themeIcon }}</span> Dark Mode
+        </button>
+        <button class="btn btn-danger btn-block mt-sm" @click="showLogoutModal = true">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <button class="sidebar-toggle" aria-label="Toggle sidebar" @click="toggleSidebar">≡</button>
+        <div class="header-content">
+          <h1 class="page-title">
+            <span class="jp-title-main">Pemesanan Bahan Ajar</span>
+            <span class="jp-title-sub">教材注文システム</span>
+          </h1>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- Hero -->
+        <div class="pemesanan-hero washi-texture">
+          <div class="pemesanan-hero-vertical">注文</div>
+          <div class="pemesanan-hero-content">
+            <h2>Buat Pesanan Bahan Ajar</h2>
+            <p>Pilih bahan ajar, tentukan jumlah, dan konfirmasi data pengiriman</p>
+          </div>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="pemesanan-steps">
+          <div class="pemesanan-step" :class="{ active: step === 1 }">
+            <span class="pemesanan-step-num">1</span>
+            <span>Pilih Bahan Ajar</span>
+          </div>
+          <span class="pemesanan-step-sep">→</span>
+          <div class="pemesanan-step" :class="{ active: step === 2 }">
+            <span class="pemesanan-step-num">2</span>
+            <span>Konfirmasi &amp; Kirim</span>
+          </div>
+        </div>
+
+        <!-- ===== STEP 1 ===== -->
+        <div v-show="step === 1">
+
+          <!-- Filter row -->
+          <div class="pemesanan-filter-row">
+            <input type="text" class="form-input" v-model.trim="search"
+                   placeholder="Cari judul atau kode..." autocomplete="off">
+            <select class="form-input" v-model="filterKategori">
+              <option value="">Semua Kategori</option>
+              <option v-for="k in kategoriList" :key="k" :value="k">{{ k }}</option>
+            </select>
+          </div>
+
+          <!-- Stok list -->
+          <div class="pemesanan-stok-list">
+            <div
+              v-for="(item, index) in filteredStok"
+              :key="item.kode"
+              class="pemesanan-stok-row"
+              :class="{ selected: selectedMap[item.kode] }"
+              @click="toggleRow(item.kode)">
+              <input type="checkbox"
+                     :checked="!!selectedMap[item.kode]"
+                     @click.stop="toggleRow(item.kode)">
+              <div>
+                <div class="pemesanan-stok-judul">{{ item.judul }}</div>
+                <div class="pemesanan-stok-kode">{{ item.kode | uppercase }}</div>
+              </div>
+              <stok-badge :qty="item.qty" :safety="item.safety"></stok-badge>
+              <span class="pemesanan-stok-harga">{{ item.harga | rupiah }}</span>
+              <input
+                type="number"
+                min="1"
+                :max="item.qty"
+                class="pemesanan-qty-input"
+                :disabled="!selectedMap[item.kode]"
+                v-model.number="qtyMap[item.kode]"
+                @click.stop
+                @keydown.enter.prevent="focusNextQty(index)"
+                placeholder="Qty">
+            </div>
+
+            <div v-if="filteredStok.length === 0" class="empty-state">
+              <div class="empty-state-icon">(&gt;_&lt;)</div>
+              <p class="empty-state-text">Tidak ada bahan ajar ditemukan</p>
+            </div>
+          </div>
+
+          <!-- Total bar -->
+          <div class="pemesanan-total-bar">
+            <div>
+              <div class="pemesanan-total-label">
+                {{ selectedItems.length }} item dipilih &bull; {{ totalQty }} unit
+              </div>
+            </div>
+            <div class="pemesanan-total-value">{{ totalHarga | rupiah }}</div>
+          </div>
+
+          <div class="pemesanan-action-row">
+            <button class="btn btn-primary" @click="goStep2">
+              Lanjut ke Konfirmasi →
+            </button>
+          </div>
+        </div>
+
+        <!-- ===== STEP 2 ===== -->
+        <div v-show="step === 2">
+
+          <!-- Order summary stats -->
+          <div class="pemesanan-summary-stats">
+            <stat-card label="Item Dipesan" label-jp="品目" :value="selectedItems.length" icon="(_|_)"></stat-card>
+            <stat-card label="Total Unit" label-jp="数量" :value="totalQty" icon="(^_^)"></stat-card>
+            <stat-card label="Sub-Total" label-jp="小計" :value="totalHarga | rupiah" icon="[¥]"></stat-card>
+          </div>
+
+          <!-- Form data pemesan -->
+          <div class="pemesanan-konfirmasi-grid">
+            <div class="form-group">
+              <label class="form-label">Nama Pemesan</label>
+              <input type="text" class="form-input" :class="{ error: errors.nama }"
+                     v-model.trim="form.nama" placeholder="Nama lengkap pemesan">
+              <span class="form-error" v-if="errors.nama">{{ errors.nama }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">UPBJJ Tujuan</label>
+              <select class="form-input" :class="{ error: errors.upbjj }" v-model="form.upbjj">
+                <option value="">Pilih UPBJJ</option>
+                <option v-for="u in upbjjList" :key="u" :value="u">UPBJJ {{ u }}</option>
+              </select>
+              <span class="form-error" v-if="errors.upbjj">{{ errors.upbjj }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Jenis Pengiriman</label>
+              <select class="form-input" :class="{ error: errors.pengiriman }" v-model="form.pengiriman">
+                <option value="">Pilih Pengiriman</option>
+                <option v-for="p in pengirimanList" :key="p.kode" :value="p.kode">{{ p.nama }}</option>
+              </select>
+              <span class="form-error" v-if="errors.pengiriman">{{ errors.pengiriman }}</span>
+            </div>
+          </div>
+
+          <!-- Ongkir (shown only for EXP) -->
+          <div class="pemesanan-ongkir-row" v-show="form.pengiriman === 'EXP'">
+            <span>Biaya Ekspres</span>
+            <span>{{ ongkir | rupiah }}</span>
+          </div>
+
+          <!-- Grand total -->
+          <div class="pemesanan-grand-total">
+            <span class="pemesanan-grand-total-label">Total Pembayaran</span>
+            <span class="pemesanan-grand-total-value">{{ grandTotal | rupiah }}</span>
+          </div>
+
+          <div class="pemesanan-action-row">
+            <button class="btn btn-secondary" @click="goBack">← Kembali</button>
+            <button class="btn btn-primary" @click="submitPemesanan">Buat Pesanan (^_^)</button>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer style="margin-top: var(--spacing-10); text-align: center; color: var(--text-secondary); font-size: var(--text-xs);">
+          <span style="font-family: var(--font-jp-serif);">注文システム</span>
+          &nbsp;|&nbsp; Sistem Pemesanan Bahan Ajar SITTA
+        </footer>
+      </div>
+    </main>
+
+    <!-- Sidebar overlay -->
+    <div class="sidebar-overlay" :class="{ active: sidebarOpen }" v-if="sidebarOpen" @click="closeSidebar"></div>
+
+    <!-- Logout Modal -->
+    <div class="modal-backdrop" :class="{ active: showLogoutModal }">
+      <div class="modal" role="dialog">
+        <header class="modal-header">
+          <h2 class="modal-title">Konfirmasi Logout</h2>
+          <button class="modal-close" @click="showLogoutModal = false">&times;</button>
+        </header>
+        <div class="modal-body">
+          <p class="text-secondary mb-md">Apakah Anda yakin ingin keluar dari aplikasi?</p>
+        </div>
+        <footer class="modal-footer">
+          <button class="btn btn-secondary" @click="showLogoutModal = false">Batal</button>
+          <button class="btn btn-danger" @click="confirmLogout">Ya, Keluar</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Success Overlay -->
+    <div class="pemesanan-success-overlay" v-if="showSuccess" tabindex="0">
+      <div class="pemesanan-success-card">
+        <div class="pemesanan-success-icon">(^_^)</div>
+        <div class="pemesanan-success-title">Pesanan Berhasil!</div>
+        <div class="pemesanan-success-do">{{ lastDO }}</div>
+        <div class="pemesanan-success-desc">
+          Nomor DO Anda adalah <strong>{{ lastDO }}</strong>.<br>
+          Gunakan nomor ini untuk melacak pengiriman di halaman Tracking.
+        </div>
+        <div style="display:flex; gap: var(--spacing-3); justify-content: center;">
+          <a href="tracking.html" class="btn btn-outline">Lacak Sekarang</a>
+          <button class="btn btn-primary" @click="closeSuccess">Buat Pesanan Baru</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="alert-container">
+      <div v-for="a in alerts" :key="a.id" class="alert" :class="a.type">
+        <span class="alert-message">{{ a.message }}</span>
+        <button class="alert-close" @click="removeAlert(a.id)">&times;</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/vendor/vue.min.js"></script>
+  <script src="js/dataBahanAjar.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/pemesanan-app.js"></script>
+</body>
+</html>

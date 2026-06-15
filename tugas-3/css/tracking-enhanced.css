@@ -1,0 +1,571 @@
+/* ========================================
+   JAPANESE CREATIVE AESTHETIC - Tracking Page
+   SITTA - Bold Layout with Traditional Elements
+   ======================================== */
+
+/* ========================================
+   PAGE TITLE - Dual Language
+   ======================================== */
+
+.jp-title-main {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-jp);
+  color: var(--text-primary);
+  display: block;
+}
+
+.jp-title-sub {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-sm);
+  font-weight: var(--font-normal);
+  letter-spacing: var(--tracking-jp-wide);
+  color: var(--text-tertiary);
+  display: block;
+  margin-top: var(--spacing-1);
+  opacity: 0.7;
+}
+
+/* ========================================
+   HERO SECTION - Dramatic Japanese Layout
+   ======================================== */
+
+.tracking-hero {
+  position: relative;
+  background: linear-gradient(135deg, var(--jp-indigo) 0%, var(--jp-indigo-light) 50%, var(--accent-primary) 100%);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-10) var(--spacing-8);
+  margin-bottom: var(--spacing-8);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--spacing-8);
+  overflow: hidden;
+  box-shadow: var(--shadow-2xl);
+}
+
+/* Traditional pattern overlay */
+.tracking-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='0.5'/%3E%3Cpath d='M0 50h100M50 0v100' stroke='rgba(255,255,255,0.03)'/%3E%3Ccircle cx='50' cy='50' r='30' stroke='rgba(255,255,255,0.02)' fill='none'/%3E%3C/svg%3E");
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Vertical Decoration */
+.hero-vertical-deco {
+  display: flex;
+  align-items: center;
+  padding-right: var(--spacing-6);
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.jp-vertical-label {
+  font-family: var(--font-jp-serif);
+  color: rgba(255, 255, 255, 0.15);
+  letter-spacing: var(--spacing-3);
+}
+
+.jp-char-1,
+.jp-char-2 {
+  font-size: var(--text-6xl);
+  font-weight: var(--font-black);
+  line-height: 1;
+}
+
+/* Hero Main Content */
+.hero-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1;
+}
+
+.hero-title {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  color: white;
+  letter-spacing: var(--tracking-jp);
+  line-height: 1.2;
+  margin-bottom: var(--spacing-4);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.hero-subtitle {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-base);
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: var(--tracking-wide);
+  line-height: var(--leading-relaxed);
+  max-width: 600px;
+}
+
+/* Hero Decoration */
+.hero-decoration {
+  display: flex;
+  align-items: center;
+  padding-left: var(--spacing-6);
+}
+
+.jp-circle-pattern {
+  width: 120px;
+  height: 120px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  position: relative;
+}
+
+.jp-circle-pattern::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+}
+
+.jp-circle-pattern::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+}
+
+/* ========================================
+   SEARCH SECTION - Enhanced Japanese Style
+   ======================================== */
+
+.tracking-search-section {
+  margin-bottom: var(--spacing-10);
+}
+
+.search-container {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-8);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative top accent */
+.search-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-primary) 50%,
+    transparent
+  );
+}
+
+.search-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+}
+
+.search-label-jp {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-jp-wide);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  padding: var(--spacing-1) var(--spacing-3);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.search-title {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-jp);
+  color: var(--text-primary);
+}
+
+/* Search Form */
+.tracking-search-form {
+  margin-bottom: var(--spacing-6);
+}
+
+.search-input-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2);
+  transition: all var(--duration-300) var(--ease-jp);
+}
+
+.search-input-group:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 4px var(--accent-subtle);
+}
+
+.search-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-subtle);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.search-icon {
+  font-size: var(--text-2xl);
+}
+
+.tracking-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-lg);
+  color: var(--text-primary);
+  padding: var(--spacing-3);
+  outline: none;
+}
+
+.tracking-search-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.tracking-search-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4) var(--spacing-6);
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-jp);
+  cursor: pointer;
+  transition: all var(--duration-200) var(--ease-jp);
+  box-shadow: var(--shadow-jp);
+}
+
+.tracking-search-btn:hover {
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent-primary));
+  box-shadow: var(--shadow-jp-hover);
+  transform: translateY(-2px);
+}
+
+.search-btn-text {
+  display: none;
+}
+
+.search-btn-icon {
+  font-size: var(--text-xl);
+}
+
+/* Search Examples */
+.search-examples {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+}
+
+.examples-label {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+.example-dos {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.example-do {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--accent-primary);
+  background: var(--accent-subtle);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-200) var(--ease-jp);
+  border: 1px solid transparent;
+}
+
+.example-do:hover {
+  background: var(--accent-primary);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.example-divider {
+  color: var(--border-default);
+  font-size: var(--text-sm);
+}
+
+/* ========================================
+   REFERENCE SECTION - Japanese Card Grid
+   ======================================== */
+
+.tracking-reference {
+  margin-top: var(--spacing-12);
+  margin-bottom: var(--spacing-10);
+}
+
+.reference-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+  position: relative;
+  padding-left: var(--spacing-6);
+}
+
+.reference-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent-primary),
+    transparent
+  );
+  border-radius: var(--radius-full);
+}
+
+.reference-label-jp {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-jp-wide);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  padding: var(--spacing-1) var(--spacing-3);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.reference-title {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-jp);
+  color: var(--text-primary);
+}
+
+.reference-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-4);
+}
+
+.reference-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-5);
+  text-align: center;
+  transition: all var(--duration-300) var(--ease-jp);
+  position: relative;
+  overflow: hidden;
+}
+
+.reference-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-primary),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--duration-300) var(--ease-jp);
+}
+
+.reference-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-primary);
+}
+
+.reference-card:hover::before {
+  opacity: 1;
+}
+
+.reference-icon {
+  font-size: var(--text-4xl);
+  margin-bottom: var(--spacing-3);
+  display: block;
+}
+
+.reference-title-card {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-jp);
+  margin-bottom: var(--spacing-2);
+}
+
+.reference-desc {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+/* ========================================
+   FOOTER - Japanese Pattern
+   ======================================== */
+
+.tracking-footer {
+  margin-top: var(--spacing-12);
+  padding-top: var(--spacing-8);
+  border-top: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+.footer-pattern-jp {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--border-subtle),
+    var(--border-subtle) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+}
+
+.footer-content-jp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.footer-text-jp {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  letter-spacing: var(--tracking-jp);
+}
+
+.footer-divider {
+  color: var(--border-default);
+  font-size: var(--text-sm);
+}
+
+.footer-text {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .reference-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .tracking-hero {
+    grid-template-columns: 1fr;
+    padding: var(--spacing-8) var(--spacing-6);
+    text-align: center;
+  }
+
+  .hero-vertical-deco {
+    display: none;
+  }
+
+  .hero-decoration {
+    display: none;
+  }
+
+  .hero-title {
+    font-size: var(--text-2xl);
+  }
+
+  .search-input-group {
+    flex-direction: column;
+  }
+
+  .search-icon-wrapper {
+    width: 100%;
+    height: 40px;
+  }
+
+  .tracking-search-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .reference-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-examples {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .example-dos {
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+
+  .example-divider {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .search-btn-text {
+    display: inline;
+  }
+}

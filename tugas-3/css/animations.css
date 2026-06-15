@@ -1,0 +1,467 @@
+/* ========================================
+   JAPANESE CREATIVE AESTHETIC - Animations
+   SITTA - Natural, Deliberate Motion
+   ======================================== */
+
+/* ========================================
+   FADE ANIMATIONS
+   ======================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   SLIDE ANIMATIONS - Japanese Reading Direction
+   ======================================== */
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slide from left - Japanese reading direction */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   SHAKE ANIMATION - Error Feedback
+   ======================================== */
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-8px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(8px);
+  }
+}
+
+/* ========================================
+   SCALE ANIMATIONS
+   ======================================== */
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleRotate {
+  from {
+    transform: scale(0.9) rotate(-2deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   BRUSH STROKE REVEAL - Calligraphy Style
+   ======================================== */
+
+@keyframes brushReveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes brushRevealVertical {
+  0% {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   FLOAT ANIMATION - Gentle Japanese Motion
+   ======================================== */
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+/* ========================================
+   SHIMMER EFFECT - Premium Feel
+   ======================================== */
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes shimmerSlow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ========================================
+   PULSE ANIMATION - Status Indicators
+   ======================================== */
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(199, 62, 58, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(199, 62, 58, 0.6);
+  }
+}
+
+/* ========================================
+   ROTATION ANIMATIONS
+   ======================================== */
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotateSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   WIPE ANIMATIONS - Japanese Screen Style
+   ======================================== */
+
+@keyframes wipeFromLeft {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes wipeFromTop {
+  0% {
+    clip-path: inset(100% 0 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.fade-in {
+  will-change: opacity;
+  animation: fadeIn var(--duration-300, 0.3s) ease forwards;
+}
+
+.slide-up {
+  will-change: transform, opacity;
+  animation: slideUp var(--duration-300, 0.3s) ease forwards;
+}
+
+.slide-left {
+  will-change: transform, opacity;
+  animation: slideInLeft var(--duration-400, 0.4s) ease forwards;
+}
+
+.shake {
+  will-change: transform;
+  animation: shake var(--duration-400, 0.4s) ease;
+}
+
+.brush-reveal {
+  animation: brushReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.brush-reveal-vertical {
+  animation: brushRevealVertical 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.float-gentle {
+  animation: float 4s ease-in-out infinite;
+}
+
+.float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.scale-rotate {
+  animation: scaleRotate 0.5s ease-out forwards;
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* ========================================
+   STAGGER CHILDREN - Orchestrated Reveals
+   ======================================== */
+
+.stagger-children > *:nth-child(1) {
+  animation-delay: var(--stagger-1);
+}
+.stagger-children > *:nth-child(2) {
+  animation-delay: var(--stagger-2);
+}
+.stagger-children > *:nth-child(3) {
+  animation-delay: var(--stagger-3);
+}
+.stagger-children > *:nth-child(4) {
+  animation-delay: var(--stagger-4);
+}
+.stagger-children > *:nth-child(5) {
+  animation-delay: var(--stagger-5);
+}
+.stagger-children > *:nth-child(6) {
+  animation-delay: var(--stagger-6);
+}
+
+/* ========================================
+   DELAY VARIANTS
+   ======================================== */
+
+.delay-0 { animation-delay: 0ms; }
+.delay-50 { animation-delay: 50ms; }
+.delay-75 { animation-delay: 75ms; }
+.delay-100 { animation-delay: 100ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-225 { animation-delay: 225ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-375 { animation-delay: 375ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+
+/* ========================================
+   DURATION VARIANTS
+   ======================================== */
+
+.duration-fast { animation-duration: 150ms; }
+.duration-normal { animation-duration: 300ms; }
+.duration-slow { animation-duration: 600ms; }
+.duration-slower { animation-duration: 900ms; }
+
+/* ========================================
+   EASING VARIANTS
+   ======================================== */
+
+.ease-jp {
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.ease-smooth {
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ease-bounce {
+  animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ========================================
+   SPECIAL EFFECTS
+   ======================================== */
+
+/* Japanese seal stamp effect */
+@keyframes sealStamp {
+  0% {
+    transform: scale(2) rotate(-15deg);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(0.9) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.seal-stamp {
+  animation: sealStamp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* Ink spread effect */
+@keyframes inkSpread {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.ink-spread {
+  animation: inkSpread 0.6s ease-out forwards;
+}
+
+/* Paper unfold effect */
+@keyframes paperUnfold {
+  0% {
+    clip-path: inset(0 50% 0 50%);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+.paper-unfold {
+  animation: paperUnfold 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Cherry blossom fall */
+@keyframes petalFall {
+  0% {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.petal-fall {
+  animation: petalFall 10s linear infinite;
+}
+
+/* ========================================
+   REDUCED MOTION SUPPORT
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

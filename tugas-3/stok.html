@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stok Bahan Ajar - SITTA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/japanese-aesthetic.css">
+  <link rel="stylesheet" href="css/stok-enhanced.css">
+  <style>[v-cloak]{display:none}</style>
+</head>
+<body>
+  <div id="stok-app" class="app-container" v-cloak>
+    <!-- Sidebar -->
+    <aside class="sidebar" :class="{ open: sidebarOpen }">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-icon">S</span>
+          <span>SITTA</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item"><span>(^^)</span><span>Dashboard</span></a>
+        <a href="tracking.html" class="nav-item"><span>(&gt;_&lt;)</span><span>Tracking Pengiriman</span></a>
+        <a href="stok.html" class="nav-item active"><span>(_|_)</span><span>Stok Bahan Ajar</span></a>
+        <a href="pemesanan.html" class="nav-item"><span>(+_+)</span><span>Pemesanan</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-secondary btn-block" @click="toggleTheme"><span>{{ themeIcon }}</span> Dark Mode</button>
+        <button class="btn btn-danger btn-block mt-sm" @click="showLogoutModal = true">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <button class="sidebar-toggle" aria-label="Toggle sidebar" @click="toggleSidebar">≡</button>
+        <div class="header-content">
+          <h1 class="page-title">
+            <span class="stok-page-title">Stok Bahan Ajar</span>
+            <span class="stok-page-title-sub">在庫管理システム</span>
+          </h1>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- Hero -->
+        <div class="stok-hero washi-texture">
+          <div class="stok-hero-vertical-deco">
+            <div class="vertical-text stok-vertical-label">
+              <span class="stok-char-1">在</span>
+              <span class="stok-char-2">庫</span>
+            </div>
+          </div>
+          <div class="stok-hero-main">
+            <h2 class="stok-hero-title">Manajemen Stok Bahan Ajar</h2>
+            <p class="stok-hero-subtitle">Kelola inventaris bahan ajar dengan sistem pencarian dan filter cepat</p>
+          </div>
+          <div class="stok-hero-decoration">
+            <div class="stok-circle-pattern"></div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <section class="stok-stats-wrapper" aria-label="Statistik stok">
+          <article class="stok-stat-card">
+            <div class="stok-stat-label">Total Item</div>
+            <div class="stok-stat-value" data-unit="items">{{ stats.totalItems }}</div>
+            <div class="stok-stat-icon" aria-hidden="true">(._.)</div>
+          </article>
+          <article class="stok-stat-card">
+            <div class="stok-stat-label">Total Stok</div>
+            <div class="stok-stat-value" data-unit="unit">{{ stats.totalQty }}</div>
+            <div class="stok-stat-icon" aria-hidden="true">(&gt;_&lt;)</div>
+          </article>
+          <article class="stok-stat-card">
+            <div class="stok-stat-label">Stok Menipis</div>
+            <div class="stok-stat-value" data-unit="items">{{ stats.lowStock }}</div>
+            <div class="stok-stat-icon" aria-hidden="true">(o_o)!</div>
+          </article>
+          <article class="stok-stat-card">
+            <div class="stok-stat-label">Kategori</div>
+            <div class="stok-stat-value" data-unit="items">{{ stats.categories }}</div>
+            <div class="stok-stat-icon" aria-hidden="true">(^_^)</div>
+          </article>
+        </section>
+
+        <!-- Search & Actions -->
+        <div class="stok-search-actions-wrapper">
+          <div class="stok-header-row">
+            <div class="stok-search-section">
+              <div class="stok-search-label">
+                <span class="stok-search-label-jp">検索</span>
+                <span>Cari Bahan Ajar</span>
+              </div>
+              <div class="stok-search-input-wrapper">
+                <div class="stok-search-icon">(°_°)</div>
+                <input type="text" class="stok-search-input" v-model.trim="search"
+                       placeholder="Masukkan nama atau kode barang...">
+              </div>
+            </div>
+            <div class="stok-actions-section">
+              <button class="stok-view-toggle" :data-view="view" title="Ganti tampilan" @click="toggleView">
+                <span>{{ viewIcon }}</span>
+              </button>
+              <button class="stok-add-btn" @click="openAdd">
+                <span>+ Tambah</span>
+                <span class="stok-add-btn-jp">追加</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table View -->
+        <div class="stok-table-wrapper" v-show="view === 'table'">
+          <table class="stok-table">
+            <thead>
+              <tr>
+                <th>Lokasi Rak</th>
+                <th>Kode</th>
+                <th>Judul</th>
+                <th>Kategori</th>
+                <th>UPBJJ</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in filtered" :key="item.kode" class="slide-up">
+                <td>{{ item.lokasiRak }}</td>
+                <td>{{ item.kode }}</td>
+                <td>{{ item.judul }}</td>
+                <td>{{ item.kategori }}</td>
+                <td>{{ item.upbjj }}</td>
+                <td>{{ item.harga | rupiah }}</td>
+                <td>
+                  <stok-badge :qty="item.qty" :safety="item.safety"></stok-badge>
+                  {{ item.qty }}
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn btn-sm btn-ghost" @click="goDetail(item.kode)">Lihat</button>
+                    <button class="btn btn-sm btn-outline" @click="openEdit(item)">Edit</button>
+                    <button class="btn btn-sm btn-danger" @click="openDelete(item)">Hapus</button>
+                  </div>
+                </td>
+              </tr>
+              <tr v-if="filtered.length === 0">
+                <td colspan="8" class="empty-state">
+                  <p class="empty-state-text">Tidak ada data ditemukan</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Grid View -->
+        <div class="stock-grid" v-show="view === 'grid'">
+          <div class="stock-grid-container">
+            <div class="stock-card slide-up" v-for="item in filtered" :key="item.kode">
+              <div class="stock-card-cover" style="cursor:pointer" @click="goDetail(item.kode)">
+                <img src="img/default-book.svg" :alt="item.judul">
+                <span class="stock-card-badge">{{ item.qty }}</span>
+              </div>
+              <div class="stock-card-content">
+                <h3 class="stock-card-title" style="cursor:pointer" @click="goDetail(item.kode)">{{ item.judul }}</h3>
+                <span class="stock-card-code">{{ item.kode }}</span>
+                <div class="stock-card-actions">
+                  <button class="btn btn-sm btn-ghost" @click="goDetail(item.kode)">Lihat</button>
+                  <button class="btn btn-sm btn-outline" @click="openEdit(item)">Edit</button>
+                  <button class="btn btn-sm btn-danger" @click="openDelete(item)">Hapus</button>
+                </div>
+              </div>
+            </div>
+            <div v-if="filtered.length === 0" class="empty-state">
+              <div class="empty-state-icon">(&gt;_&lt;)</div>
+              <p class="empty-state-text">Tidak ada data ditemukan</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="stok-footer">
+          <div class="stok-footer-pattern" aria-hidden="true"></div>
+          <div class="stok-footer-content">
+            <span class="stok-footer-text-jp">在庫システム</span>
+            <span class="stok-footer-divider" aria-hidden="true">|</span>
+            <span class="stok-footer-text">Sistem Manajemen Stok SITTA</span>
+          </div>
+        </footer>
+      </div>
+    </main>
+
+    <!-- Sidebar overlay -->
+    <div class="sidebar-overlay" :class="{ active: sidebarOpen }" v-if="sidebarOpen" @click="closeSidebar"></div>
+
+    <!-- Logout Modal -->
+    <div class="modal-backdrop" :class="{ active: showLogoutModal }">
+      <div class="modal" role="dialog">
+        <header class="modal-header">
+          <h2 class="modal-title">Konfirmasi Logout</h2>
+          <button class="modal-close" @click="showLogoutModal = false">&times;</button>
+        </header>
+        <div class="modal-body"><p class="text-secondary mb-md">Apakah Anda yakin ingin keluar dari aplikasi?</p></div>
+        <footer class="modal-footer">
+          <button class="btn btn-secondary" @click="showLogoutModal = false">Batal</button>
+          <button class="btn btn-danger" @click="confirmLogout">Ya, Keluar</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Add Stock Modal -->
+    <div class="modal-backdrop" :class="{ active: showAdd }">
+      <div class="modal" role="dialog">
+        <header class="modal-header">
+          <h2 class="modal-title">Tambah Stok Baru</h2>
+          <button class="modal-close" @click="showAdd = false">&times;</button>
+        </header>
+        <div class="modal-body">
+          <form @submit.prevent="saveAdd">
+            <div class="form-group">
+              <label class="form-label">Kode</label>
+              <input type="text" class="form-input" :class="{ error: errors.kode }" v-model.trim="form.kode">
+              <span class="form-error" v-if="errors.kode">{{ errors.kode }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Judul</label>
+              <input type="text" class="form-input" :class="{ error: errors.judul }" v-model.trim="form.judul">
+              <span class="form-error" v-if="errors.judul">{{ errors.judul }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kategori</label>
+              <select class="form-input" v-model="form.kategori">
+                <option v-for="k in kategoriList" :key="k" :value="k">{{ k }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">UPBJJ</label>
+              <select class="form-input" :class="{ error: errors.upbjj }" v-model="form.upbjj">
+                <option v-for="u in upbjjList" :key="u" :value="u">{{ u }}</option>
+              </select>
+              <span class="form-error" v-if="errors.upbjj">{{ errors.upbjj }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Lokasi Rak</label>
+              <input type="text" class="form-input" :class="{ error: errors.lokasiRak }" v-model.trim="form.lokasiRak">
+              <span class="form-error" v-if="errors.lokasiRak">{{ errors.lokasiRak }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Harga</label>
+              <input type="number" min="0" class="form-input" :class="{ error: errors.harga }" v-model.number="form.harga">
+              <span class="form-error" v-if="errors.harga">{{ errors.harga }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Jumlah Stok</label>
+              <input type="number" min="0" class="form-input" :class="{ error: errors.qty }" v-model.number="form.qty">
+              <span class="form-error" v-if="errors.qty">{{ errors.qty }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Safety Stock</label>
+              <input type="number" min="0" class="form-input" :class="{ error: errors.safety }" v-model.number="form.safety">
+              <span class="form-error" v-if="errors.safety">{{ errors.safety }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Catatan</label>
+              <input type="text" class="form-input" v-model.trim="form.catatanHTML">
+            </div>
+          </form>
+        </div>
+        <footer class="modal-footer">
+          <button class="btn btn-secondary" @click="showAdd = false">Batal</button>
+          <button class="btn btn-primary" @click="saveAdd">Simpan</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Edit Stock Modal -->
+    <div class="modal-backdrop" :class="{ active: showEdit }">
+      <div class="modal" role="dialog">
+        <header class="modal-header">
+          <h2 class="modal-title">Edit Stok</h2>
+          <button class="modal-close" @click="showEdit = false">&times;</button>
+        </header>
+        <div class="modal-body">
+          <form @submit.prevent="saveEdit">
+            <div class="form-group">
+              <label class="form-label">Kode</label>
+              <input type="text" class="form-input" :class="{ error: editErrors.kode }" v-model.trim="editForm.kode">
+              <span class="form-error" v-if="editErrors.kode">{{ editErrors.kode }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Judul</label>
+              <input type="text" class="form-input" :class="{ error: editErrors.judul }" v-model.trim="editForm.judul">
+              <span class="form-error" v-if="editErrors.judul">{{ editErrors.judul }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kategori</label>
+              <select class="form-input" v-model="editForm.kategori">
+                <option v-for="k in kategoriList" :key="k" :value="k">{{ k }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">UPBJJ</label>
+              <select class="form-input" :class="{ error: editErrors.upbjj }" v-model="editForm.upbjj">
+                <option v-for="u in upbjjList" :key="u" :value="u">{{ u }}</option>
+              </select>
+              <span class="form-error" v-if="editErrors.upbjj">{{ editErrors.upbjj }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Lokasi Rak</label>
+              <input type="text" class="form-input" :class="{ error: editErrors.lokasiRak }" v-model.trim="editForm.lokasiRak">
+              <span class="form-error" v-if="editErrors.lokasiRak">{{ editErrors.lokasiRak }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Harga</label>
+              <input type="number" min="0" class="form-input" :class="{ error: editErrors.harga }" v-model.number="editForm.harga">
+              <span class="form-error" v-if="editErrors.harga">{{ editErrors.harga }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Jumlah Stok</label>
+              <input type="number" min="0" class="form-input" :class="{ error: editErrors.qty }" v-model.number="editForm.qty">
+              <span class="form-error" v-if="editErrors.qty">{{ editErrors.qty }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Safety Stock</label>
+              <input type="number" min="0" class="form-input" :class="{ error: editErrors.safety }" v-model.number="editForm.safety">
+              <span class="form-error" v-if="editErrors.safety">{{ editErrors.safety }}</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Catatan</label>
+              <input type="text" class="form-input" v-model.trim="editForm.catatanHTML">
+            </div>
+          </form>
+        </div>
+        <footer class="modal-footer">
+          <button class="btn btn-secondary" @click="showEdit = false">Batal</button>
+          <button class="btn btn-primary" @click="saveEdit">Update</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal-backdrop" :class="{ active: showDelete }">
+      <div class="modal" role="dialog">
+        <header class="modal-header">
+          <h2 class="modal-title">Konfirmasi Hapus</h2>
+          <button class="modal-close" @click="showDelete = false">&times;</button>
+        </header>
+        <div class="modal-body">
+          <p class="text-secondary mb-md">Apakah Anda yakin ingin menghapus stok ini?</p>
+          <p class="text-secondary">{{ deleteLabel }}</p>
+        </div>
+        <footer class="modal-footer">
+          <button class="btn btn-secondary" @click="showDelete = false">Batal</button>
+          <button class="btn btn-danger" @click="confirmDelete">Ya, Hapus</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="alert-container">
+      <div v-for="a in alerts" :key="a.id" class="alert" :class="a.type">
+        <span class="alert-message">{{ a.message }}</span>
+        <button class="alert-close" @click="removeAlert(a.id)">&times;</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/vendor/vue.min.js"></script>
+  <script src="js/dataBahanAjar.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/stok-app.js"></script>
+</body>
+</html>
