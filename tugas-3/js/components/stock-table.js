@@ -1,0 +1,145 @@
+Vue.component('ba-stock-table', {
+  template: '#tpl-stock-table',
+  emits: ['go-detail'],
+
+  data: function () {
+    return {
+      stok: window.AppData.stok.map(function (s) { return Object.assign({}, s); }),
+      kategoriList: window.AppData.kategoriList,
+      upbjjList: window.AppData.upbjjList,
+      search: '',
+      view: localStorage.getItem('stockView') || 'table',
+
+      showAdd: false,
+      form: { lokasiRak: '', kode: '', judul: '', kategori: 'MK Wajib', upbjj: 'Jakarta', harga: null, qty: null, safety: null, catatanHTML: '' },
+      errors: {},
+
+      showEdit: false,
+      editForm: {},
+      editErrors: {},
+      editOriginalKode: '',
+
+      showDelete: false,
+      deleteKode: '',
+      deleteLabel: ''
+    };
+  },
+
+  computed: {
+    viewIcon: function () { return this.view === 'grid' ? '▦' : '≡'; },
+
+    filtered: function () {
+      var q = this.search.toLowerCase();
+      if (!q) return this.stok;
+      return this.stok.filter(function (item) {
+        return item.lokasiRak.toLowerCase().indexOf(q) !== -1 ||
+               item.kode.toLowerCase().indexOf(q) !== -1 ||
+               item.judul.toLowerCase().indexOf(q) !== -1 ||
+               item.kategori.toLowerCase().indexOf(q) !== -1 ||
+               item.upbjj.toLowerCase().indexOf(q) !== -1;
+      });
+    },
+
+    stats: function () {
+      var totalQty = 0, lowStock = 0, cats = {};
+      this.stok.forEach(function (item) {
+        totalQty += Number(item.qty) || 0;
+        if (Number(item.qty) < Number(item.safety)) lowStock++;
+        cats[item.kategori] = true;
+      });
+      return {
+        totalItems: this.stok.length,
+        totalQty: totalQty.toLocaleString('id-ID'),
+        lowStock: lowStock,
+        categories: Object.keys(cats).length
+      };
+    }
+  },
+
+  watch: {
+    view: function (val) { localStorage.setItem('stockView', val); },
+    'form.kode': function (val) { if (val) this.form.kode = val.toUpperCase(); }
+  },
+
+  methods: {
+    emptyForm: function () {
+      return { lokasiRak: '', kode: '', judul: '', kategori: 'MK Wajib', upbjj: 'Jakarta', harga: null, qty: null, safety: null, catatanHTML: '' };
+    },
+
+    toggleView: function () { this.view = this.view === 'table' ? 'grid' : 'table'; },
+
+    validateStock: function (f, errsKey) {
+      var e = {};
+      if (!f.lokasiRak) e.lokasiRak = 'Field ini wajib diisi';
+      if (!f.kode) e.kode = 'Field ini wajib diisi';
+      if (!f.judul) e.judul = 'Field ini wajib diisi';
+      if (!f.upbjj) e.upbjj = 'Field ini wajib diisi';
+      if (f.harga === null || f.harga === '' || isNaN(f.harga) || f.harga < 0) e.harga = 'Harga harus berupa angka yang valid';
+      if (f.qty === null || f.qty === '' || isNaN(f.qty) || f.qty < 0) e.qty = 'Jumlah stok harus berupa angka yang valid';
+      if (f.safety === null || f.safety === '' || isNaN(f.safety) || f.safety < 0) e.safety = 'Safety stock harus berupa angka yang valid';
+      this[errsKey] = e;
+      return Object.keys(e).length === 0;
+    },
+
+    openAdd: function () {
+      this.form = this.emptyForm();
+      this.errors = {};
+      this.showAdd = true;
+    },
+
+    saveAdd: function () {
+      if (!this.validateStock(this.form, 'errors')) return;
+      var self = this;
+      if (this.stok.some(function (s) { return s.kode === self.form.kode; })) {
+        this.errors = Object.assign({}, this.errors, { kode: 'Kode barang sudah ada' });
+        return;
+      }
+      this.stok.push({
+        kode: this.form.kode, judul: this.form.judul, kategori: this.form.kategori,
+        upbjj: this.form.upbjj, lokasiRak: this.form.lokasiRak,
+        harga: Number(this.form.harga), qty: Number(this.form.qty),
+        safety: Number(this.form.safety), catatanHTML: this.form.catatanHTML
+      });
+      this.showAdd = false;
+      this.$root.showAlert('(^_^) Stok berhasil ditambahkan', 'success');
+    },
+
+    openEdit: function (item) {
+      this.editForm = Object.assign({}, item);
+      this.editErrors = {};
+      this.editOriginalKode = item.kode;
+      this.showEdit = true;
+    },
+
+    saveEdit: function () {
+      if (!this.validateStock(this.editForm, 'editErrors')) return;
+      var self = this;
+      var idx = this.stok.findIndex(function (s) { return s.kode === self.editOriginalKode; });
+      if (idx === -1) { this.$root.showAlert('(x_x) Data tidak ditemukan', 'error'); return; }
+      this.stok.splice(idx, 1, {
+        kode: this.editForm.kode, judul: this.editForm.judul, kategori: this.editForm.kategori,
+        upbjj: this.editForm.upbjj, lokasiRak: this.editForm.lokasiRak,
+        harga: Number(this.editForm.harga), qty: Number(this.editForm.qty),
+        safety: Number(this.editForm.safety), catatanHTML: this.editForm.catatanHTML
+      });
+      this.showEdit = false;
+      this.$root.showAlert('(^_^) Stok berhasil diperbarui', 'success');
+    },
+
+    openDelete: function (item) {
+      this.deleteKode = item.kode;
+      this.deleteLabel = item.judul + ' (' + item.kode + ')';
+      this.showDelete = true;
+    },
+
+    confirmDelete: function () {
+      var self = this;
+      var idx = this.stok.findIndex(function (s) { return s.kode === self.deleteKode; });
+      if (idx !== -1) this.stok.splice(idx, 1);
+      this.showDelete = false;
+      this.$root.showAlert('(^_^) Stok berhasil dihapus', 'success');
+    },
+
+    getStok: function () { return this.stok; }
+  }
+});

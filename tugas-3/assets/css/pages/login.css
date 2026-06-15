@@ -1,0 +1,314 @@
+/* ========================================
+   LOGIN PAGE - Japanese Split-Panel Aesthetic
+   SITTA - Two-column: brand left, form right
+   ======================================== */
+
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+/* ========================================
+   LEFT PANEL - Brand / Atmospheric
+   ======================================== */
+
+.login-brand-panel {
+  position: relative;
+  background: linear-gradient(160deg, var(--jp-indigo) 0%, var(--jp-indigo-light) 55%, var(--accent-primary) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--spacing-10) var(--spacing-12);
+  overflow: hidden;
+}
+
+/* Grid overlay */
+.login-brand-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='none' stroke='rgba(255,255,255,0.03)' stroke-width='1'/%3E%3Cpath d='M50 0v100M0 50h100' stroke='rgba(255,255,255,0.025)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Giant kanji watermark */
+.login-kanji-bg {
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-jp-serif);
+  font-size: 28rem;
+  font-weight: var(--font-black);
+  color: rgba(255, 255, 255, 0.04);
+  writing-mode: vertical-rl;
+  user-select: none;
+  pointer-events: none;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+/* Thin accent line left edge */
+.login-brand-panel::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.15), transparent);
+}
+
+.login-brand-content {
+  position: relative;
+  z-index: 1;
+}
+
+.login-brand-eyebrow {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: var(--spacing-4);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.login-brand-eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.login-brand-logo {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-6xl);
+  font-weight: var(--font-black);
+  color: #fff;
+  letter-spacing: var(--tracking-jp-wide);
+  line-height: 1;
+  margin-bottom: var(--spacing-4);
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.login-brand-name {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  color: rgba(255, 255, 255, 0.8);
+  line-height: var(--leading-relaxed);
+  max-width: 280px;
+  margin-bottom: var(--spacing-8);
+  letter-spacing: var(--tracking-jp);
+}
+
+.login-brand-jp {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: var(--tracking-jp-wide);
+  display: block;
+  margin-top: var(--spacing-2);
+}
+
+/* Decorative circles bottom-left */
+.login-brand-deco {
+  position: absolute;
+  bottom: var(--spacing-10);
+  left: var(--spacing-12);
+  display: flex;
+  gap: var(--spacing-3);
+  z-index: 1;
+}
+
+.login-deco-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.login-deco-dot:first-child {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ========================================
+   RIGHT PANEL - Form
+   ======================================== */
+
+.login-form-panel {
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-10) var(--spacing-12);
+  position: relative;
+  overflow-y: auto;
+}
+
+/* Top-right corner accent */
+.login-form-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
+}
+
+.login-form-inner {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-form-header {
+  margin-bottom: var(--spacing-8);
+}
+
+.login-form-eyebrow {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: var(--spacing-2);
+}
+
+.login-form-title {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-jp);
+  line-height: 1.2;
+  margin-bottom: var(--spacing-2);
+}
+
+.login-form-subtitle {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+/* Divider */
+.login-form-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin: var(--spacing-6) 0;
+}
+
+.login-form-divider::before,
+.login-form-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.login-form-divider-text {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  letter-spacing: var(--tracking-jp);
+  white-space: nowrap;
+}
+
+.login-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-6);
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.login-links a {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--duration-150) var(--ease-jp);
+}
+
+.login-links a:hover {
+  color: var(--accent-primary);
+}
+
+/* ========================================
+   SHAKE ANIMATION SCOPE
+   ======================================== */
+
+.login-card {
+  /* wrapper kept for shake animation target */
+  width: 100%;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 900px) {
+  .login-page {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .login-brand-panel {
+    padding: var(--spacing-8) var(--spacing-8);
+    min-height: 220px;
+  }
+
+  .login-kanji-bg {
+    font-size: 14rem;
+    right: var(--spacing-4);
+    top: 50%;
+    transform: translateY(-50%);
+    writing-mode: horizontal-tb;
+    opacity: 0.06;
+  }
+
+  .login-brand-logo { font-size: var(--text-4xl); }
+  .login-brand-name { font-size: var(--text-sm); margin-bottom: 0; }
+  .login-brand-deco { display: none; }
+
+  .login-form-panel {
+    padding: var(--spacing-8) var(--spacing-6);
+    align-items: flex-start;
+  }
+
+  .login-form-inner {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-brand-panel {
+    padding: var(--spacing-6);
+    min-height: 180px;
+  }
+
+  .login-brand-logo { font-size: var(--text-3xl); }
+
+  .login-form-panel {
+    padding: var(--spacing-6) var(--spacing-4);
+  }
+
+  .login-links {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-3);
+  }
+}

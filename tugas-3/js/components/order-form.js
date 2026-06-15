@@ -1,30 +1,28 @@
-new Vue({
-  el: '#pemesanan-app',
-  mixins: [window.appShellMixin],
+Vue.component('order-form', {
+  template: '#tpl-order-form',
 
-  data: {
-    stok: window.app.stok.map(function (s) { return Object.assign({}, s); }),
-    kategoriList: window.app.kategoriList,
-    upbjjList: window.app.upbjjList,
-    pengirimanList: window.app.pengirimanList,
+  data: function () {
+    return {
+      stok: window.AppData.stok.map(function (s) { return Object.assign({}, s); }),
+      kategoriList: window.AppData.kategoriList,
+      upbjjList: window.AppData.upbjjList,
+      pengirimanList: window.AppData.pengirimanList,
+      doCounter: window.AppData.doCounter,
 
-    step: 1,
-    search: '',
-    filterKategori: '',
+      step: 1,
+      search: '',
+      filterKategori: '',
 
-    selectedMap: {},
-    qtyMap: {},
+      selectedMap: {},
+      qtyMap: {},
 
-    form: { nama: '', upbjj: '', pengiriman: '' },
-    errors: {},
-    ongkir: 0,
+      form: { nama: '', upbjj: '', pengiriman: '' },
+      errors: {},
+      ongkir: 0,
 
-    showSuccess: false,
-    lastDO: ''
-  },
-
-  created: function () {
-    window.SittaAuth.requireAuth();
+      showSuccess: false,
+      lastDO: ''
+    };
   },
 
   computed: {
@@ -32,9 +30,7 @@ new Vue({
       var q = this.search.toLowerCase();
       var kat = this.filterKategori;
       return this.stok.filter(function (item) {
-        var matchQ = !q ||
-          item.judul.toLowerCase().indexOf(q) !== -1 ||
-          item.kode.toLowerCase().indexOf(q) !== -1;
+        var matchQ = !q || item.judul.toLowerCase().indexOf(q) !== -1 || item.kode.toLowerCase().indexOf(q) !== -1;
         var matchK = !kat || item.kategori === kat;
         return matchQ && matchK;
       });
@@ -59,26 +55,19 @@ new Vue({
       }, 0);
     },
 
-    grandTotal: function () {
-      return this.totalHarga + this.ongkir;
-    }
+    grandTotal: function () { return this.totalHarga + this.ongkir; }
   },
 
   watch: {
-    // Watcher 1: reset qty when item unchecked
     selectedMap: {
       deep: true,
       handler: function (val) {
         var self = this;
         Object.keys(val).forEach(function (kode) {
-          if (!val[kode]) {
-            self.$set(self.qtyMap, kode, 0);
-          }
+          if (!val[kode]) self.$set(self.qtyMap, kode, 0);
         });
       }
     },
-
-    // Watcher 2: ongkir based on pengiriman choice
     'form.pengiriman': function (val) {
       this.ongkir = val === 'EXP' ? 15000 : 0;
     }
@@ -87,9 +76,7 @@ new Vue({
   methods: {
     toggleRow: function (kode) {
       this.$set(this.selectedMap, kode, !this.selectedMap[kode]);
-      if (this.selectedMap[kode] && !this.qtyMap[kode]) {
-        this.$set(this.qtyMap, kode, 1);
-      }
+      if (this.selectedMap[kode] && !this.qtyMap[kode]) this.$set(this.qtyMap, kode, 1);
     },
 
     focusNextQty: function (index) {
@@ -100,19 +87,12 @@ new Vue({
     goStep2: function () {
       var self = this;
       var valid = this.selectedItems.length > 0 &&
-        this.selectedItems.every(function (s) {
-          return Number(self.qtyMap[s.kode]) > 0;
-        });
-      if (!valid) {
-        this.showAlert('(o_o)! Pilih minimal 1 bahan ajar dan isi jumlah pesanan', 'warning');
-        return;
-      }
+        this.selectedItems.every(function (s) { return Number(self.qtyMap[s.kode]) > 0; });
+      if (!valid) { this.$root.showAlert('(o_o)! Pilih minimal 1 bahan ajar dan isi jumlah pesanan', 'warning'); return; }
       this.step = 2;
     },
 
-    goBack: function () {
-      this.step = 1;
-    },
+    goBack: function () { this.step = 1; },
 
     validateForm: function () {
       var e = {};
@@ -126,15 +106,12 @@ new Vue({
     submitPemesanan: function () {
       if (!this.validateForm()) return;
       var year = new Date().getFullYear();
-      var counter = window.app.doCounter;
-      var doKey = 'DO' + year + '-' + String(counter).padStart(4, '0');
+      var doKey = 'DO' + year + '-' + String(this.doCounter).padStart(4, '0');
       var self = this;
-
       var items = this.selectedItems.map(function (s) {
         return { kode: s.kode, judul: s.judul, qty: Number(self.qtyMap[s.kode]), harga: s.harga };
       });
-
-      window.app.tracking[doKey] = {
+      var entry = {
         nim: '-',
         nama: this.form.nama,
         status: 'Diproses',
@@ -148,7 +125,11 @@ new Vue({
         ]
       };
 
-      window.app.doCounter++;
+      if (this.$root.$refs.doTracking) {
+        this.$root.$refs.doTracking.addTracking(doKey, entry);
+      }
+      window.AppData.doCounter++;
+      this.doCounter++;
       this.lastDO = doKey;
       this.showSuccess = true;
     },
@@ -163,10 +144,6 @@ new Vue({
       this.form = { nama: '', upbjj: '', pengiriman: '' };
       this.errors = {};
       this.ongkir = 0;
-    },
-
-    handleSuccessKeydown: function (e) {
-      if (e.key === 'Escape') this.closeSuccess();
     }
   }
 });

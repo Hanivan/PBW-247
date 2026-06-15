@@ -3,10 +3,374 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SITTA - Sistem Informasi Bahan Ajar</title>
-  <script>window.location.href = "login.html";</script>
+  <title>SITTA — Sistem Informasi Bahan Ajar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>[v-cloak]{display:none}</style>
 </head>
 <body>
-  <p>Redirecting to login...</p>
+  <div id="app" v-cloak>
+
+    <!-- ===== LOGIN TAB ===== -->
+    <div v-show="tab === 'login'" class="login-page">
+
+      <!-- Left: Brand Panel -->
+      <div class="login-brand-panel" aria-hidden="true">
+        <span class="login-kanji-bg">認証</span>
+        <div class="login-brand-content">
+          <p class="login-brand-eyebrow">Universitas Terbuka</p>
+          <h1 class="login-brand-logo">SITTA</h1>
+          <p class="login-brand-name">
+            Sistem Informasi Bahan Ajar
+            <span class="login-brand-jp">書籍管理システム</span>
+          </p>
+        </div>
+        <div class="login-brand-deco">
+          <span class="login-deco-dot"></span>
+          <span class="login-deco-dot"></span>
+          <span class="login-deco-dot"></span>
+        </div>
+      </div>
+
+      <!-- Right: Form Panel -->
+      <div class="login-form-panel">
+        <div class="login-form-inner">
+          <main class="login-card fade-in" :class="{ shake: shake }">
+            <header class="login-form-header">
+              <p class="login-form-eyebrow">ログイン / Masuk Akun</p>
+              <h2 class="login-form-title">Selamat Datang</h2>
+              <p class="login-form-subtitle">Masuk ke SITTA untuk mengelola bahan ajar dan pengiriman.</p>
+            </header>
+
+            <div class="login-form-divider">
+              <span class="login-form-divider-text">認証情報を入力してください</span>
+            </div>
+
+            <form aria-label="Form login" @submit.prevent="submitLogin">
+              <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input type="email" id="email" class="form-input" :class="{ error: loginErrors.email }"
+                       v-model.trim="loginForm.email" placeholder="nama@ut.ac.id" autofocus>
+                <span class="form-error" v-if="loginErrors.email">{{ loginErrors.email }}</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" class="form-input" :class="{ error: loginErrors.password }"
+                       v-model="loginForm.password" placeholder="Masukkan password">
+                <span class="form-error" v-if="loginErrors.password">{{ loginErrors.password }}</span>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Masuk →</button>
+              <nav class="login-links" aria-label="Tautan tambahan">
+                <a href="#" class="form-link" @click.prevent="openForgot">Lupa Password?</a>
+                <a href="#" class="form-link" @click.prevent="openRegister">Daftar Akun</a>
+              </nav>
+            </form>
+          </main>
+        </div>
+      </div>
+
+      <!-- Forgot Modal -->
+      <div class="modal-backdrop" :class="{ active: showForgot }">
+        <div class="modal" role="dialog">
+          <header class="modal-header">
+            <h2 class="modal-title">Lupa Password</h2>
+            <button class="modal-close" @click="showForgot = false">&times;</button>
+          </header>
+          <div class="modal-body">
+            <p class="text-secondary mb-md">Masukkan email Anda untuk mereset password.</p>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-input" v-model.trim="forgot.email">
+            </div>
+          </div>
+          <footer class="modal-footer">
+            <button class="btn btn-secondary" @click="showForgot = false">Batal</button>
+            <button class="btn btn-primary" @click="submitForgot">Kirim Reset Link</button>
+          </footer>
+        </div>
+      </div>
+
+      <!-- Register Modal -->
+      <div class="modal-backdrop" :class="{ active: showRegister }">
+        <div class="modal" role="dialog">
+          <header class="modal-header">
+            <h2 class="modal-title">Daftar Akun Baru</h2>
+            <button class="modal-close" @click="showRegister = false">&times;</button>
+          </header>
+          <div class="modal-body">
+            <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" :class="{ error: regErrors.nama }" v-model.trim="register.nama"><span class="form-error" v-if="regErrors.nama">{{ regErrors.nama }}</span></div>
+            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" :class="{ error: regErrors.email }" v-model.trim="register.email"><span class="form-error" v-if="regErrors.email">{{ regErrors.email }}</span></div>
+            <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" :class="{ error: regErrors.password }" v-model="register.password"><span class="form-error" v-if="regErrors.password">{{ regErrors.password }}</span></div>
+            <div class="form-group">
+              <label class="form-label">Lokasi</label>
+              <select class="form-input" :class="{ error: regErrors.lokasi }" v-model="register.lokasi">
+                <option value="">Pilih Lokasi</option>
+                <option value="UPBJJ Jakarta">UPBJJ Jakarta</option>
+                <option value="UPBJJ Makassar">UPBJJ Makassar</option>
+                <option value="Puslaba">Puslaba</option>
+                <option value="FISIP">FISIP</option>
+              </select>
+              <span class="form-error" v-if="regErrors.lokasi">{{ regErrors.lokasi }}</span>
+            </div>
+          </div>
+          <footer class="modal-footer">
+            <button class="btn btn-secondary" @click="showRegister = false">Batal</button>
+            <button class="btn btn-primary" @click="submitRegister">Daftar</button>
+          </footer>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== POST-LOGIN SHELL (dashboard, stok, tracking, order, stok-detail) ===== -->
+    <div v-show="tab !== 'login'" class="app-container">
+
+      <!-- Sidebar -->
+      <aside class="sidebar" :class="{ open: sidebarOpen }">
+        <div class="sidebar-header">
+          <div class="sidebar-brand">
+            <span class="sidebar-brand-icon">S</span>
+            <span>SITTA</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item" :class="{ active: tab === 'dashboard' }" @click.prevent="goTab('dashboard')"><span>(^^)</span><span>Dashboard</span></a>
+          <a href="#" class="nav-item" :class="{ active: tab === 'tracking' }" @click.prevent="goTab('tracking')"><span>(&gt;_&lt;)</span><span>Tracking Pengiriman</span></a>
+          <a href="#" class="nav-item" :class="{ active: tab === 'stok' || tab === 'stok-detail' }" @click.prevent="goTab('stok')"><span>(_|_)</span><span>Stok Bahan Ajar</span></a>
+          <a href="#" class="nav-item" :class="{ active: tab === 'order' }" @click.prevent="goTab('order')"><span>(+_+)</span><span>Pemesanan</span></a>
+        </nav>
+        <div class="sidebar-footer">
+          <button class="btn btn-secondary btn-block" @click="toggleTheme"><span>{{ themeIcon }}</span> Dark Mode</button>
+          <button class="btn btn-danger btn-block mt-sm" @click="showLogoutModal = true">Logout</button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+
+        <!-- DASHBOARD TAB -->
+        <div v-show="tab === 'dashboard'">
+          <header class="header">
+            <button class="sidebar-toggle" aria-label="Toggle sidebar" @click="toggleSidebar">≡</button>
+            <div class="header-content" :data-greeting="greetingText">
+              <h1 class="page-title">
+                <span class="jp-title-main">Dashboard</span>
+                <span class="jp-title-sub">ダッシュボード</span>
+              </h1>
+            </div>
+            <div class="header-actions">
+              <span class="text-secondary jp-greeting">{{ greetingText }}</span>
+            </div>
+          </header>
+          <div class="content">
+            <section class="dashboard-hero washi-texture" aria-label="Selamat datang">
+              <time class="hero-vertical">
+                <div class="vertical-text jp-date-display">
+                  <span class="jp-date-year">{{ jpYear }}</span>
+                  <span class="jp-date-month">{{ jpMonth }}</span>
+                  <span class="jp-date-day">{{ jpDay }}</span>
+                </div>
+              </time>
+              <div class="hero-content">
+                <div class="hero-greeting">
+                  <span class="hero-greeting-jp">{{ jpGreeting }}</span>
+                  <span class="hero-greeting-id">{{ idGreeting }}</span>
+                </div>
+                <p class="hero-subtitle">Sistem Informasi Bahan Ajar — Universitas Terbuka</p>
+              </div>
+              <div class="hero-seal" aria-hidden="true"><div class="jp-seal seal-stamp">S</div></div>
+            </section>
+
+            <section class="dashboard-section" aria-labelledby="statsTitle">
+              <header class="section-header-with-deco">
+                <span class="section-label-jp">統計</span>
+                <h2 class="section-title" id="statsTitle">Statistik Ringkas</h2>
+              </header>
+              <div class="stats-bento-grid" role="list">
+                <article class="stat-card-large slide-up delay-0" role="listitem">
+                  <div class="stat-card-deco" aria-hidden="true"></div>
+                  <div class="stat-card-header">
+                    <span class="stat-label-jp">教材</span>
+                    <span class="stat-icon-large" aria-hidden="true">(_|_)</span>
+                  </div>
+                  <div class="stat-value-jp">{{ totalItems }}</div>
+                  <div class="stat-label">Total Bahan Ajar</div>
+                </article>
+                <div class="stats-row">
+                  <stat-card label="Total Stok" label-jp="在庫" :value="totalStock" icon="(^_^)"></stat-card>
+                  <stat-card label="Sedang Dikirim" label-jp="配送中" :value="shippingCount" icon="(&gt;_&lt;)"></stat-card>
+                  <stat-card label="UPBJJ Aktif" label-jp="地域" :value="upbjjCount" icon="[*]"></stat-card>
+                </div>
+              </div>
+            </section>
+
+            <section class="dashboard-section" aria-labelledby="actionsTitle">
+              <header class="section-header-with-deco">
+                <span class="section-label-jp">アクション</span>
+                <h2 class="section-title" id="actionsTitle">Aksi Cepat</h2>
+              </header>
+              <nav class="quick-actions-flow stagger-children" aria-label="Aksi cepat">
+                <a href="#" class="action-card-jp slide-up" @click.prevent="goTab('stok')">
+                  <div class="action-card-inner">
+                    <div class="action-icon-jp" aria-hidden="true">＋</div>
+                    <div class="action-content-jp"><span class="action-title-jp">Stok Baru</span><span class="action-desc-jp">Tambah bahan ajar</span></div>
+                    <div class="action-arrow" aria-hidden="true">→</div>
+                  </div>
+                </a>
+                <a href="#" class="action-card-jp slide-up delay-50" @click.prevent="goTab('tracking')">
+                  <div class="action-card-inner">
+                    <div class="action-icon-jp" aria-hidden="true">(O_O)</div>
+                    <div class="action-content-jp"><span class="action-title-jp">Lacak Pengiriman</span><span class="action-desc-jp">Cek status pengiriman</span></div>
+                    <div class="action-arrow" aria-hidden="true">→</div>
+                  </div>
+                </a>
+                <div class="action-card-jp slide-up disabled delay-100" role="button" tabindex="-1" aria-disabled="true">
+                  <div class="action-card-inner">
+                    <div class="action-icon-jp" aria-hidden="true">[|]</div>
+                    <div class="action-content-jp"><span class="action-title-jp">Export Laporan</span><span class="action-desc-jp">Unduh laporan bulanan</span></div>
+                    <div class="action-arrow" aria-hidden="true">→</div>
+                  </div>
+                </div>
+              </nav>
+            </section>
+
+            <section class="dashboard-section" aria-labelledby="menuTitle">
+              <header class="section-header-with-deco">
+                <span class="section-label-jp">メニュー</span>
+                <h2 class="section-title" id="menuTitle">Menu Utama</h2>
+              </header>
+              <div class="nav-grid-asymmetric" aria-label="Menu navigasi utama">
+                <a href="#" class="nav-card-featured slide-up delay-0" @click.prevent="goTab('stok')">
+                  <div class="nav-card-featured-bg" aria-hidden="true"></div>
+                  <div class="nav-card-featured-content">
+                    <div class="nav-card-featured-icon" aria-hidden="true">(^^)</div>
+                    <h3 class="nav-card-featured-title">Informasi Bahan Ajar</h3>
+                    <p class="nav-card-featured-desc">Lihat daftar dan stok bahan ajar yang tersedia</p>
+                    <div class="nav-card-featured-footer"><span class="nav-card-featured-label">教材情報</span><span class="nav-card-featured-arrow" aria-hidden="true">→</span></div>
+                  </div>
+                </a>
+                <div class="nav-cards-column">
+                  <a href="#" class="nav-card-secondary slide-up delay-75" @click.prevent="goTab('tracking')">
+                    <div class="nav-card-secondary-left"><span class="nav-card-secondary-icon" aria-hidden="true">(&gt;_&lt;)</span></div>
+                    <div class="nav-card-secondary-right"><h4 class="nav-card-secondary-title">Tracking Pengiriman</h4><span class="nav-card-secondary-label">配送追跡</span></div>
+                  </a>
+                  <div class="nav-card-secondary slide-up disabled delay-150" aria-disabled="true"><div class="nav-card-secondary-left"><span class="nav-card-secondary-icon" aria-hidden="true">(_|_)</span></div><div class="nav-card-secondary-right"><h4 class="nav-card-secondary-title">Monitoring Progress DO</h4><span class="nav-card-secondary-label">進捗監視</span></div></div>
+                  <div class="nav-card-secondary slide-up disabled delay-225" aria-disabled="true"><div class="nav-card-secondary-left"><span class="nav-card-secondary-icon">[||]</span></div><div class="nav-card-secondary-right"><h4 class="nav-card-secondary-title">Rekap Bahan Ajar</h4><span class="nav-card-secondary-label">教材集計</span></div></div>
+                </div>
+                <div class="nav-cards-row">
+                  <div class="nav-card-tertiary slide-up disabled delay-300" aria-disabled="true"><span class="nav-card-tertiary-icon">/↑\</span><div class="nav-card-tertiary-content"><h4 class="nav-card-tertiary-title">Laporan</h4><span class="nav-card-tertiary-label">レポート</span></div></div>
+                  <div class="nav-card-tertiary slide-up disabled delay-375" aria-disabled="true"><span class="nav-card-tertiary-icon">(time)</span><div class="nav-card-tertiary-content"><h4 class="nav-card-tertiary-title">Histori Transaksi</h4><span class="nav-card-tertiary-label">取引履歴</span></div></div>
+                </div>
+              </div>
+            </section>
+
+            <footer class="dashboard-footer">
+              <div class="footer-pattern" aria-hidden="true"></div>
+              <div class="footer-content">
+                <span class="footer-text-jp">© 令和６年</span>
+                <span class="footer-divider" aria-hidden="true">|</span>
+                <span class="footer-text">SITTA — Sistem Informasi Bahan Ajar</span>
+              </div>
+            </footer>
+          </div>
+        </div>
+
+        <!-- STOK TAB -->
+        <div v-show="tab === 'stok'">
+          <header class="header">
+            <button class="sidebar-toggle" @click="toggleSidebar">≡</button>
+            <div class="header-content">
+              <h1 class="page-title"><span class="stok-page-title">Stok Bahan Ajar</span><span class="stok-page-title-sub">在庫管理システム</span></h1>
+            </div>
+          </header>
+          <div class="content">
+            <ba-stock-table @go-detail="goDetail"></ba-stock-table>
+          </div>
+        </div>
+
+        <!-- STOK-DETAIL TAB -->
+        <div v-show="tab === 'stok-detail'">
+          <header class="header">
+            <button class="sidebar-toggle" @click="toggleSidebar">≡</button>
+            <div class="header-content">
+              <h1 class="page-title"><span class="stok-detail-page-title">Detail Bahan Ajar</span><span class="stok-detail-page-title-sub">教材詳細</span></h1>
+            </div>
+          </header>
+          <div class="content">
+            <stok-detail-panel v-if="selectedKode" :kode="selectedKode"
+              @go-detail="goDetail"
+              @go-back="goTab('stok')">
+            </stok-detail-panel>
+          </div>
+        </div>
+
+        <!-- TRACKING TAB -->
+        <div v-show="tab === 'tracking'">
+          <header class="header">
+            <button class="sidebar-toggle" @click="toggleSidebar">≡</button>
+            <div class="header-content">
+              <h1 class="page-title"><span class="jp-title-main">Tracking Pengiriman</span><span class="jp-title-sub">配送追跡システム</span></h1>
+            </div>
+          </header>
+          <div class="content">
+            <do-tracking ref="doTracking"></do-tracking>
+          </div>
+        </div>
+
+        <!-- ORDER TAB -->
+        <div v-show="tab === 'order'">
+          <header class="header">
+            <button class="sidebar-toggle" @click="toggleSidebar">≡</button>
+            <div class="header-content">
+              <h1 class="page-title"><span class="jp-title-main">Pemesanan</span><span class="jp-title-sub">注文フォーム</span></h1>
+            </div>
+          </header>
+          <div class="content">
+            <order-form></order-form>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- Sidebar overlay -->
+      <div class="sidebar-overlay" :class="{ active: sidebarOpen }" v-if="sidebarOpen" @click="closeSidebar"></div>
+
+      <!-- Logout Modal -->
+      <div class="modal-backdrop" :class="{ active: showLogoutModal }">
+        <div class="modal" role="dialog">
+          <header class="modal-header">
+            <h2 class="modal-title">Konfirmasi Logout</h2>
+            <button class="modal-close" @click="showLogoutModal = false">&times;</button>
+          </header>
+          <div class="modal-body"><p class="text-secondary mb-md">Apakah Anda yakin ingin keluar dari aplikasi?</p></div>
+          <footer class="modal-footer">
+            <button class="btn btn-secondary" @click="showLogoutModal = false">Batal</button>
+            <button class="btn btn-danger" @click="confirmLogout">Ya, Keluar</button>
+          </footer>
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div class="alert-container">
+        <div v-for="a in alerts" :key="a.id" class="alert" :class="a.type">
+          <span class="alert-message">{{ a.message }}</span>
+          <button class="alert-close" @click="removeAlert(a.id)">&times;</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/vendor/vue.min.js"></script>
+  <script src="js/components/stok-badge.js"></script>
+  <script src="js/components/stat-card.js"></script>
+  <script src="js/components/stock-table.js"></script>
+  <script src="js/components/do-tracking.js"></script>
+  <script src="js/components/order-form.js"></script>
+  <script src="js/components/stok-detail-panel.js"></script>
+  <script src="js/services/api.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

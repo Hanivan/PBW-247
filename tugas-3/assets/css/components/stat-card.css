@@ -1,0 +1,58 @@
+/* stat-card component styles */
+
+.stat-card-compact {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-5);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  transition: all var(--duration-300) var(--ease-jp);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card-compact:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-default);
+}
+
+.stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon-compact {
+  font-size: var(--text-2xl);
+}
+
+.stat-content-compact {
+  flex: 1;
+}
+
+.stat-value-compact {
+  font-family: var(--font-jp-serif);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.stat-label-compact {
+  font-family: var(--font-jp-sans);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-1);
+  letter-spacing: var(--tracking-wide);
+}
+
+.stat-label-jp-small {
+  font-size: var(--text-xs);
+  opacity: 0.6;
+}

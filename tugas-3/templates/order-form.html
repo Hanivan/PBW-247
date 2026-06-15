@@ -1,0 +1,204 @@
+<div>
+  <!-- Hero -->
+  <div class="pemesanan-hero washi-texture">
+    <div class="pemesanan-hero-vertical-deco">
+      <div class="vertical-text jp-vertical-label">
+        <span class="jp-char-1">注</span>
+        <span class="jp-char-2">文</span>
+      </div>
+    </div>
+    <div class="pemesanan-hero-main">
+      <h2 class="hero-title">Formulir Pemesanan</h2>
+      <p class="hero-subtitle">Pilih bahan ajar dan lengkapi data pengiriman untuk membuat Delivery Order baru</p>
+    </div>
+    <div class="hero-decoration"><div class="jp-circle-pattern"></div></div>
+  </div>
+
+  <!-- Step Indicator -->
+  <div class="pemesanan-steps">
+    <div class="pemesanan-step" :class="{ active: step === 1 }">
+      <span class="pemesanan-step-num">1</span>
+      <span>選択 / Pilih Bahan Ajar</span>
+    </div>
+    <span class="pemesanan-step-sep">→</span>
+    <div class="pemesanan-step" :class="{ active: step === 2 }">
+      <span class="pemesanan-step-num">2</span>
+      <span>確認 / Konfirmasi Pesanan</span>
+    </div>
+  </div>
+
+  <!-- Step 1: Item Selection -->
+  <div v-show="step === 1">
+    <!-- Filter Card -->
+    <div class="pemesanan-filter-card">
+      <div class="pemesanan-filter-header">
+        <span class="search-label-jp">検索</span>
+        <h3 class="search-title">Cari Bahan Ajar</h3>
+      </div>
+      <div class="pemesanan-filter-row">
+        <div class="pemesanan-filter-input-wrapper">
+          <span class="pemesanan-filter-icon">(&gt;_&lt;)</span>
+          <input type="text" class="pemesanan-filter-input" v-model.trim="search"
+                 placeholder="Cari judul atau kode bahan ajar...">
+        </div>
+        <select class="form-input pemesanan-filter-select" v-model="filterKategori">
+          <option value="">すべて / Semua Kategori</option>
+          <option v-for="k in kategoriList" :key="k" :value="k">{{ k }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="pemesanan-table-wrapper">
+      <table class="stok-table">
+        <thead>
+          <tr>
+            <th>選</th><th>Kode</th><th>Judul</th><th>Kategori</th><th>UPBJJ</th><th>Harga</th><th>Stok</th><th>Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, idx) in filteredStok" :key="item.kode"
+              :class="{ 'pemesanan-row-selected': !!selectedMap[item.kode] }"
+              @click="toggleRow(item.kode)">
+            <td @click.stop>
+              <input type="checkbox" class="pemesanan-checkbox"
+                     :checked="!!selectedMap[item.kode]"
+                     @change="toggleRow(item.kode)">
+            </td>
+            <td><span class="pemesanan-kode">{{ item.kode }}</span></td>
+            <td class="pemesanan-judul">{{ item.judul }}</td>
+            <td><span class="pemesanan-kategori-badge">{{ item.kategori }}</span></td>
+            <td>{{ item.upbjj }}</td>
+            <td class="pemesanan-harga">{{ item.harga | rupiah }}</td>
+            <td><stok-badge :qty="item.qty" :safety="item.safety"></stok-badge> {{ item.qty }}</td>
+            <td @click.stop>
+              <input type="number" min="1" :max="item.qty" class="pemesanan-qty-input"
+                     :disabled="!selectedMap[item.kode]"
+                     v-model.number="qtyMap[item.kode]"
+                     @keydown.tab.prevent="focusNextQty(idx)">
+            </td>
+          </tr>
+          <tr v-if="filteredStok.length === 0">
+            <td colspan="8">
+              <div class="pemesanan-empty-state">
+                <div class="pemesanan-empty-icon">(·_·)</div>
+                <p class="pemesanan-empty-text">データが見つかりません — Tidak ada bahan ajar ditemukan</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Summary Bar -->
+    <div class="pemesanan-summary-bar" v-if="selectedItems.length > 0">
+      <div class="pemesanan-summary-info">
+        <span class="pemesanan-summary-label">合計 / Dipilih</span>
+        <span class="pemesanan-summary-detail">
+          <strong>{{ selectedItems.length }}</strong> item &nbsp;·&nbsp;
+          <strong>{{ totalQty }}</strong> unit &nbsp;·&nbsp;
+          <strong>{{ totalHarga | rupiah }}</strong>
+        </span>
+      </div>
+      <button class="btn btn-primary pemesanan-next-btn" @click="goStep2">
+        次へ / Lanjut →
+      </button>
+    </div>
+    <div class="pemesanan-empty-bar" v-else>
+      <span class="pemesanan-empty-bar-icon">(+_+)</span>
+      Pilih bahan ajar dari tabel di atas untuk melanjutkan
+    </div>
+  </div>
+
+  <!-- Step 2: Confirm & Form -->
+  <div v-show="step === 2">
+    <!-- Order Summary -->
+    <div class="pemesanan-section-card">
+      <div class="pemesanan-section-header">
+        <span class="search-label-jp">注文</span>
+        <h3 class="search-title">Ringkasan Pesanan</h3>
+      </div>
+      <div class="pemesanan-table-wrapper">
+        <table class="stok-table">
+          <thead>
+            <tr><th>Bahan Ajar</th><th>Qty</th><th>Harga Satuan</th><th>Subtotal</th></tr>
+          </thead>
+          <tbody>
+            <tr v-for="s in selectedItems" :key="s.kode">
+              <td class="pemesanan-judul">{{ s.judul }}</td>
+              <td>{{ qtyMap[s.kode] }}</td>
+              <td>{{ s.harga | rupiah }}</td>
+              <td class="pemesanan-harga">{{ (s.harga * (qtyMap[s.kode] || 0)) | rupiah }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="pemesanan-tfoot-ongkir">
+              <td colspan="3">Ongkos Kirim</td>
+              <td>{{ ongkir | rupiah }}</td>
+            </tr>
+            <tr class="pemesanan-tfoot-total">
+              <td colspan="3"><strong>Grand Total</strong></td>
+              <td><strong>{{ grandTotal | rupiah }}</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Customer Form -->
+    <div class="pemesanan-section-card">
+      <div class="pemesanan-section-header">
+        <span class="search-label-jp">情報</span>
+        <h3 class="search-title">Data Pengiriman</h3>
+      </div>
+      <div class="pemesanan-form-grid">
+        <div class="form-group">
+          <label class="form-label">名前 / Nama Pemesan</label>
+          <input type="text" class="form-input" :class="{ error: errors.nama }" v-model.trim="form.nama"
+                 placeholder="Masukkan nama lengkap...">
+          <span class="form-error" v-if="errors.nama">{{ errors.nama }}</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">地域 / UPBJJ Tujuan</label>
+          <select class="form-input" :class="{ error: errors.upbjj }" v-model="form.upbjj">
+            <option value="">-- Pilih UPBJJ --</option>
+            <option v-for="u in upbjjList" :key="u" :value="u">{{ u }}</option>
+          </select>
+          <span class="form-error" v-if="errors.upbjj">{{ errors.upbjj }}</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">配送 / Jenis Pengiriman</label>
+          <select class="form-input" :class="{ error: errors.pengiriman }" v-model="form.pengiriman">
+            <option value="">-- Pilih Pengiriman --</option>
+            <option v-for="p in pengirimanList" :key="p.kode" :value="p.kode">{{ p.nama }}</option>
+          </select>
+          <span class="form-error" v-if="errors.pengiriman">{{ errors.pengiriman }}</span>
+        </div>
+      </div>
+      <div class="pemesanan-form-actions">
+        <button class="btn btn-secondary" @click="goBack">← Kembali</button>
+        <button class="btn btn-primary" @click="submitPemesanan">
+          <span>(^_^)</span> Buat Pesanan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-backdrop" :class="{ active: showSuccess }" tabindex="-1">
+    <div class="modal" role="dialog">
+      <header class="modal-header">
+        <h2 class="modal-title">(^_^) 注文完了 — Pesanan Berhasil!</h2>
+        <button class="modal-close" @click="closeSuccess">&times;</button>
+      </header>
+      <div class="modal-body">
+        <p class="pemesanan-success-do-label">番号 / Nomor DO Anda:</p>
+        <p class="pemesanan-success-do">{{ lastDO }}</p>
+        <p class="text-secondary">Gunakan nomor DO ini untuk melacak pengiriman di halaman <strong>Tracking Pengiriman</strong>.</p>
+      </div>
+      <footer class="modal-footer">
+        <button class="btn btn-primary" @click="closeSuccess">Tutup</button>
+      </footer>
+    </div>
+  </div>
+</div>
